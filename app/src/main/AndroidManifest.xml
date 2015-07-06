@@ -18,7 +18,12 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        <activity
+
+		<meta-data
+			android:name="com.facebook.sdk.ApplicationId"
+			android:value="@string/facebook_app_id"/>
+
+		<activity
             android:name=".MainActivity"
             android:label="@string/app_name" >
             <intent-filter>
@@ -29,8 +34,17 @@
         </activity>
 		<activity
 			android:name=".NaviagtionDrawerActivity"
-			android:label="@string/title_activity_naviagtion_drawer">
+			android:label="@string/app_name">
         </activity>
+
+		<!--Dodano aby móc korzystać z facebook login / share-->
+
+		<activity
+			android:name="com.facebook.FacebookActivity"
+			android:configChanges=
+				"keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+			android:label="@string/app_name"
+			android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
     </application>
 
 </manifest>

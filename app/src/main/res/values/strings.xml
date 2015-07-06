@@ -4,7 +4,6 @@
 	<string name="hello_world">Hello world!</string>
 	<string name="action_settings">Settings</string>
 	<string name="no_network_connection_toast">Brak połączenia z internetem</string>
-	<string name="title_activity_naviagtion_drawer">NaviagtionDrawerActivity</string>
 
 	<string name="title_section1">Najwyżej oceniane</string>
 	<string name="title_section2">Ostatnio dodane</string>
@@ -18,4 +17,8 @@
 	<string name="all_recipes">Wszystkie przepisy</string>
 	<string name="top_rated">Najwyżej oceniane</string>
 	<string name="last_added">Ostatnio dodane</string>
+	<string name="facebook_app_id">1639181196319064</string>
+	<string name="add_recipe">Dodaj przepis</string>
+	<string name="category">Kategorie</string>
+	<string name="settings">Ustawienia</string>
 </resources>

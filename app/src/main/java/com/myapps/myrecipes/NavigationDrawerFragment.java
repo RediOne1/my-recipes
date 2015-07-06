@@ -1,6 +1,7 @@
 package com.myapps.myrecipes;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -15,6 +16,17 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.Profile;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
+import com.facebook.login.widget.ProfilePictureView;
+import com.myapps.myrecipes.displayingbitmaps.ImageResizer;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -50,6 +62,8 @@ public class NavigationDrawerFragment extends Fragment {
 	private int mCurrentSelectedPosition = 0;
 	private boolean mFromSavedInstanceState;
 	private boolean mUserLearnedDrawer;
+	private CallbackManager callbackManager;
+
 
 	public NavigationDrawerFragment() {
 	}
@@ -81,6 +95,42 @@ public class NavigationDrawerFragment extends Fragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+
+
+		FacebookSdk.sdkInitialize(getActivity());
+		callbackManager = CallbackManager.Factory.create();
+		LoginButton loginButton = (LoginButton) view.findViewById(R.id.login_button);
+		loginButton.setReadPermissions("user_friends");
+		// If using in a fragment
+		loginButton.setFragment(this);
+		Profile profile = Profile.getCurrentProfile();
+		if (profile != null) {
+			ProfilePictureView profilePictureView = (ProfilePictureView) view.findViewById(R.id.profile_picture);
+			profilePictureView.setProfileId(profile.getId());
+		}
+		// Other app specific specialization
+
+		// Callback registration
+		loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+			@Override
+			public void onSuccess(LoginResult loginResult) {
+				// App code
+			}
+
+			@Override
+			public void onCancel() {
+				// App code
+			}
+
+			@Override
+			public void onError(FacebookException exception) {
+				// App code
+			}
+		});
+
+		ImageView imageView = (ImageView) view.findViewById(R.id.navigation_drawer_image);
+		ImageResizer imageResizer = ((NaviagtionDrawerActivity) getActivity()).getImageResizer();
+		imageResizer.loadImage(R.drawable.navigation_drawer_image, imageView);
 		view.findViewById(R.id.favourite_recipes_item).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -197,6 +247,7 @@ public class NavigationDrawerFragment extends Fragment {
 	public void onDetach() {
 		super.onDetach();
 		mCallbacks = null;
+
 	}
 
 	@Override
@@ -223,6 +274,12 @@ public class NavigationDrawerFragment extends Fragment {
 
 	private ActionBar getActionBar() {
 		return ((AppCompatActivity) getActivity()).getSupportActionBar();
+	}
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		callbackManager.onActivityResult(requestCode, resultCode, data);
 	}
 
 	/**

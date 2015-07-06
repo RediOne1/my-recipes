@@ -7,8 +7,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.facebook.appevents.AppEventsLogger;
+
 
 public class MainActivity extends Activity {
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,5 +45,23 @@ public class MainActivity extends Activity {
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	protected void onResume() {
+		super.onResume();
+
+		// Logs 'install' and 'app activate' App Events.
+		// Pozwala sprawdzić ile osób korzysta z mojej aplikacji
+		AppEventsLogger.activateApp(this);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+
+		// Logs 'app deactivate' App Event.
+		// Dzięki temu wiem jak długo ktoś korzystał z mojej aplikacji
+		AppEventsLogger.deactivateApp(this);
 	}
 }

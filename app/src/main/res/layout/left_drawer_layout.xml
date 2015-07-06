@@ -1,17 +1,278 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:background="@color/navigation_drawer_content_background"
-              android:orientation="vertical"
-              tools:context="com.myapps.myrecipes.NavigationDrawerFragment">
-
-	<!--Subheader-->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/navigation_drawer_content_background"
+            android:orientation="vertical"
+            tools:context="com.myapps.myrecipes.NavigationDrawerFragment">
 
 	<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:orientation="vertical">
+
+		<FrameLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+
+			<ImageView
+				android:id="@+id/navigation_drawer_image"
+				android:layout_width="match_parent"
+				android:layout_height="173dp"
+				android:adjustViewBounds="true"
+				android:scaleType="centerCrop"/>
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="16dp"
+				android:orientation="vertical">
+
+				<com.facebook.login.widget.ProfilePictureView
+					android:id="@+id/profile_picture"
+					android:layout_width="56dp"
+					android:layout_height="56dp"
+					android:layout_gravity="start|top"
+					android:layout_marginStart="16dp"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="16dp"
+					android:layout_marginTop="16dp"
+					android:text="Adrian Kuta"
+					android:textSize="14sp"
+					android:textStyle="bold"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="16dp"
+					android:layout_marginTop="5dp"
+					android:text="redione193@gmail.com"
+					android:textSize="14sp"/>
+
+				<com.facebook.login.widget.LoginButton
+					android:id="@+id/login_button"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center_horizontal|bottom"
+					android:layout_marginBottom="10dp"
+					android:layout_marginTop="10dp"/>
+			</LinearLayout>
+		</FrameLayout>
+
+		<!--Subheader-->
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical">
+
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="1dp"
+				android:alpha="0.12"
+				android:background="#000"/>
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="48dp"
+				android:alpha="0.54"
+				android:gravity="center_vertical"
+				android:paddingEnd="16dp"
+				android:paddingStart="16dp"
+				android:text="@string/my_recipe_book"
+				android:textSize="14sp"/>
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:paddingBottom="8dp">
+
+			<FrameLayout
+				android:id="@+id/favourite_recipes_item"
+				android:layout_width="match_parent"
+				android:layout_height="48dp"
+				android:background="?attr/selectableItemBackground"
+				android:paddingEnd="16dp"
+				android:paddingStart="16dp">
+
+				<ImageView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center_vertical"
+					android:adjustViewBounds="true"
+					android:alpha="0.54"
+					android:src="@drawable/ic_favorite_black_24dp"/>
+
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:layout_marginStart="@dimen/navigation_drawer_text_paddingStart"
+					android:alpha="0.87"
+					android:gravity="center_vertical"
+					android:text="@string/favourite_recipes"
+					android:textSize="14sp"/>
+			</FrameLayout>
+
+			<FrameLayout
+				android:layout_width="match_parent"
+				android:layout_height="48dp"
+				android:paddingEnd="16dp"
+				android:paddingStart="16dp">
+
+				<ImageView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center_vertical"
+					android:adjustViewBounds="true"
+					android:alpha="0.54"
+					android:src="@drawable/ic_chrome_reader_mode_black_24dp"/>
+
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:layout_marginStart="@dimen/navigation_drawer_text_paddingStart"
+					android:alpha="0.87"
+					android:gravity="center_vertical"
+					android:text="@string/my_recipes"
+					android:textSize="14sp"/>
+			</FrameLayout>
+
+			<FrameLayout
+				android:layout_width="match_parent"
+				android:layout_height="48dp"
+				android:paddingEnd="16dp"
+				android:paddingStart="16dp">
+
+				<ImageView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center_vertical"
+					android:adjustViewBounds="true"
+					android:alpha="0.54"
+					android:src="@drawable/ic_add_circle_black_24dp"/>
+
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:layout_marginStart="@dimen/navigation_drawer_text_paddingStart"
+					android:alpha="0.87"
+					android:gravity="center_vertical"
+					android:text="@string/add_recipe"
+					android:textSize="14sp"/>
+			</FrameLayout>
+		</LinearLayout>
+
+		<!--Subheader-->
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical">
+
+			<View
+				android:layout_width="match_parent"
+				android:layout_height="1dp"
+				android:layout_marginTop="8dp"
+				android:alpha="0.12"
+				android:background="#000"/>
+
+			<TextView
+				android:layout_width="match_parent"
+				android:layout_height="48dp"
+				android:alpha="0.54"
+				android:gravity="center_vertical"
+				android:paddingEnd="16dp"
+				android:paddingStart="16dp"
+				android:text="@string/all_recipes"
+				android:textSize="14sp"/>
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:paddingBottom="8dp">
+
+			<FrameLayout
+				android:layout_width="match_parent"
+				android:layout_height="48dp"
+				android:paddingEnd="16dp"
+				android:paddingStart="16dp">
+
+				<ImageView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center_vertical"
+					android:adjustViewBounds="true"
+					android:alpha="0.54"
+					android:src="@drawable/ic_grade_black_24dp"/>
+
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:layout_marginStart="@dimen/navigation_drawer_text_paddingStart"
+					android:alpha="0.87"
+					android:gravity="center_vertical"
+					android:text="@string/top_rated"
+					android:textSize="14sp"/>
+			</FrameLayout>
+
+			<FrameLayout
+				android:layout_width="match_parent"
+				android:layout_height="48dp"
+				android:paddingEnd="16dp"
+				android:paddingStart="16dp">
+
+				<ImageView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center_vertical"
+					android:adjustViewBounds="true"
+					android:alpha="0.54"
+					android:src="@drawable/ic_history_black_24dp"/>
+
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:layout_marginStart="@dimen/navigation_drawer_text_paddingStart"
+					android:alpha="0.87"
+					android:gravity="center_vertical"
+					android:text="@string/last_added"
+					android:textSize="14sp"/>
+			</FrameLayout>
+
+			<FrameLayout
+				android:layout_width="match_parent"
+				android:layout_height="48dp"
+				android:paddingEnd="16dp"
+				android:paddingStart="16dp">
+
+				<ImageView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center_vertical"
+					android:adjustViewBounds="true"
+					android:alpha="0.54"
+					android:src="@drawable/ic_list_black_24dp"/>
+
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:layout_marginStart="@dimen/navigation_drawer_text_paddingStart"
+					android:alpha="0.87"
+					android:gravity="center_vertical"
+					android:text="@string/category"
+					android:textSize="14sp"/>
+			</FrameLayout>
+		</LinearLayout>
+
+
+		<!--Subheader-->
 
 		<View
 			android:layout_width="match_parent"
@@ -20,147 +281,35 @@
 			android:alpha="0.12"
 			android:background="#000"/>
 
-		<TextView
+		<LinearLayout
 			android:layout_width="match_parent"
-			android:layout_height="48dp"
-			android:alpha="0.54"
-			android:gravity="center_vertical"
-			android:paddingEnd="16dp"
-			android:paddingStart="16dp"
-			android:text="@string/my_recipe_book"
-			android:textSize="14sp"/>
-	</LinearLayout>
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:paddingBottom="8dp">
 
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:orientation="vertical"
-		android:paddingBottom="8dp">
-
-		<FrameLayout
-			android:id="@+id/favourite_recipes_item"
-			android:layout_width="match_parent"
-			android:layout_height="48dp"
-			android:background="?attr/selectableItemBackground"
-			android:paddingEnd="16dp"
-			android:paddingStart="16dp">
-
-			<ImageView
-				android:layout_width="wrap_content"
-				android:layout_height="match_parent"
-				android:adjustViewBounds="true"
-				android:alpha="0.54"
-				android:src="@mipmap/ic_launcher"/>
-
-			<TextView
+			<FrameLayout
 				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-				android:layout_marginStart="72dp"
-				android:alpha="0.87"
-				android:gravity="center_vertical"
-				android:text="@string/favourite_recipes"
-				android:textSize="14sp"/>
-		</FrameLayout>
+				android:layout_height="48dp"
+				android:paddingEnd="16dp"
+				android:paddingStart="16dp">
 
-		<FrameLayout
-			android:layout_width="match_parent"
-			android:layout_height="48dp"
-			android:paddingEnd="16dp"
-			android:paddingStart="16dp">
+				<ImageView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center_vertical"
+					android:adjustViewBounds="true"
+					android:alpha="0.54"
+					android:src="@drawable/ic_settings_black_24dp"/>
 
-			<ImageView
-				android:layout_width="wrap_content"
-				android:layout_height="match_parent"
-				android:adjustViewBounds="true"
-				android:alpha="0.54"
-				android:src="@mipmap/ic_launcher"/>
-
-			<TextView
-				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-				android:layout_marginStart="72dp"
-				android:alpha="0.87"
-				android:gravity="center_vertical"
-				android:text="@string/my_recipes"
-				android:textSize="14sp"/>
-		</FrameLayout>
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="match_parent"
+					android:layout_marginStart="@dimen/navigation_drawer_text_paddingStart"
+					android:alpha="0.87"
+					android:gravity="center_vertical"
+					android:text="@string/settings"
+					android:textSize="14sp"/>
+			</FrameLayout>
+		</LinearLayout>
 	</LinearLayout>
-
-	<!--Subheader-->
-
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:orientation="vertical">
-
-		<View
-			android:layout_width="match_parent"
-			android:layout_height="1dp"
-			android:layout_marginTop="8dp"
-			android:alpha="0.12"
-			android:background="#000"/>
-
-		<TextView
-			android:layout_width="match_parent"
-			android:layout_height="48dp"
-			android:alpha="0.54"
-			android:gravity="center_vertical"
-			android:paddingEnd="16dp"
-			android:paddingStart="16dp"
-			android:text="@string/all_recipes"
-			android:textSize="14sp"/>
-	</LinearLayout>
-
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:orientation="vertical"
-		android:paddingBottom="8dp">
-
-		<FrameLayout
-			android:layout_width="match_parent"
-			android:layout_height="48dp"
-			android:paddingEnd="16dp"
-			android:paddingStart="16dp">
-
-			<ImageView
-				android:layout_width="wrap_content"
-				android:layout_height="match_parent"
-				android:adjustViewBounds="true"
-				android:alpha="0.54"
-				android:src="@mipmap/ic_launcher"/>
-
-			<TextView
-				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-				android:layout_marginStart="72dp"
-				android:alpha="0.87"
-				android:gravity="center_vertical"
-				android:text="@string/top_rated"
-				android:textSize="14sp"/>
-		</FrameLayout>
-
-		<FrameLayout
-			android:layout_width="match_parent"
-			android:layout_height="48dp"
-			android:paddingEnd="16dp"
-			android:paddingStart="16dp">
-
-			<ImageView
-				android:layout_width="wrap_content"
-				android:layout_height="match_parent"
-				android:adjustViewBounds="true"
-				android:alpha="0.54"
-				android:src="@mipmap/ic_launcher"/>
-
-			<TextView
-				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-				android:layout_marginStart="72dp"
-				android:alpha="0.87"
-				android:gravity="center_vertical"
-				android:text="@string/last_added"
-				android:textSize="14sp"/>
-		</FrameLayout>
-	</LinearLayout>
-</LinearLayout>
+</ScrollView>
