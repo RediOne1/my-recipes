@@ -21,4 +21,8 @@
 	<string name="add_recipe">Dodaj przepis</string>
 	<string name="category">Kategorie</string>
 	<string name="settings">Ustawienia</string>
+
+	<!-- TODO: Remove or change this placeholder text -->
+	<string name="hello_blank_fragment">Hello blank fragment</string>
+	<string name="home_page">Strona główna</string>
 </resources>

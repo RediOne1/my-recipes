@@ -8,6 +8,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.facebook.appevents.AppEventsLogger;
+import com.parse.Parse;
+import com.parse.ParseFacebookUtils;
 
 
 public class MainActivity extends Activity {
@@ -17,6 +19,8 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		Parse.initialize(this, "sOtPvBFE5R8JWOcfm2gPFAUlNQLjFgadZ9KiQJMj", "jI625qcX1LCCoKaKBSMJa9dNWGzfgFhZBu3Zw5p3");
+		ParseFacebookUtils.initialize(this);
 		findViewById(R.id.start_button).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {

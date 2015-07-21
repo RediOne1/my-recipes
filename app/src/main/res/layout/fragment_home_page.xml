@@ -1,0 +1,18 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="com.myapps.myrecipes.HomePageFragment">
+
+	<com.github.ksoichiro.android.observablescrollview.ObservableGridView
+		android:id="@+id/home_page_gridView"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_marginTop="?attr/actionBarSize"
+		android:horizontalSpacing="10dp"
+		android:numColumns="2"
+		android:padding="10dp"
+		android:stretchMode="columnWidth"
+		android:verticalSpacing="10dp"/>
+
+</FrameLayout>

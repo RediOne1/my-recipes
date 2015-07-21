@@ -17,16 +17,26 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.facebook.CallbackManager;
-import com.facebook.FacebookCallback;
-import com.facebook.FacebookException;
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.Profile;
-import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
 import com.myapps.myrecipes.displayingbitmaps.ImageResizer;
+import com.parse.LogInCallback;
+import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
+import com.parse.ParseUser;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -34,6 +44,16 @@ import com.myapps.myrecipes.displayingbitmaps.ImageResizer;
  * design guidelines</a> for a complete explanation of the behaviors implemented here.
  */
 public class NavigationDrawerFragment extends Fragment {
+
+
+	public static final int HOME_PAGE = 0;
+	public static final int FAVOURITE = 1;
+	public static final int MY_RECIPES = 2;
+	public static final int TOP_RATED = 3;
+	public static final int LAST_ADDED = 4;
+	public static final int CATEGORY = 5;
+	public static final int SETTINGS = 6;
+	public static final int ADD_RECIPE = 7;
 
 	/**
 	 * Remember the position of the selected item.
@@ -62,7 +82,10 @@ public class NavigationDrawerFragment extends Fragment {
 	private int mCurrentSelectedPosition = 0;
 	private boolean mFromSavedInstanceState;
 	private boolean mUserLearnedDrawer;
-	private CallbackManager callbackManager;
+	private ProfilePictureView profilePictureView;
+	private TextView profileName;
+	private TextView profileMail;
+	private AccessTokenTracker accessTokenTracker;
 
 
 	public NavigationDrawerFragment() {
@@ -95,38 +118,35 @@ public class NavigationDrawerFragment extends Fragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-
-
 		FacebookSdk.sdkInitialize(getActivity());
-		callbackManager = CallbackManager.Factory.create();
 		LoginButton loginButton = (LoginButton) view.findViewById(R.id.login_button);
 		loginButton.setReadPermissions("user_friends");
 		// If using in a fragment
 		loginButton.setFragment(this);
-		Profile profile = Profile.getCurrentProfile();
-		if (profile != null) {
-			ProfilePictureView profilePictureView = (ProfilePictureView) view.findViewById(R.id.profile_picture);
-			profilePictureView.setProfileId(profile.getId());
-		}
-		// Other app specific specialization
 
-		// Callback registration
-		loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+		loginButton.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onSuccess(LoginResult loginResult) {
-				// App code
-			}
-
-			@Override
-			public void onCancel() {
-				// App code
-			}
-
-			@Override
-			public void onError(FacebookException exception) {
-				// App code
+			public void onClick(View view) {
+				if (ParseUser.getCurrentUser() == null)
+					logIn();
 			}
 		});
+
+		profilePictureView = (ProfilePictureView) view.findViewById(R.id.profile_picture);
+		profileName = (TextView) view.findViewById(R.id.profile_name);
+		profileMail = (TextView) view.findViewById(R.id.profile_mail);
+
+
+		accessTokenTracker = new AccessTokenTracker() {
+			@Override
+			protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+				if (currentAccessToken == null) {
+					ParseUser.logOut();
+					updateUI();
+				}
+			}
+		};
+		accessTokenTracker.startTracking();
 
 		ImageView imageView = (ImageView) view.findViewById(R.id.navigation_drawer_image);
 		ImageResizer imageResizer = ((NaviagtionDrawerActivity) getActivity()).getImageResizer();
@@ -134,9 +154,62 @@ public class NavigationDrawerFragment extends Fragment {
 		view.findViewById(R.id.favourite_recipes_item).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				selectItem(0);
+				selectItem(FAVOURITE);
 			}
 		});
+		view.findViewById(R.id.home_item).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				selectItem(HOME_PAGE);
+			}
+		});
+		view.findViewById(R.id.add_recipe_item).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				selectItem(ADD_RECIPE);
+			}
+		});
+		updateUI();
+	}
+
+	private void logIn() {
+		ParseFacebookUtils.logInWithReadPermissionsInBackground(this, Arrays.asList("public_profile", "email"), new LogInCallback() {
+			@Override
+			public void done(ParseUser parseUser, ParseException e) {
+				updateUI();
+			}
+		});
+	}
+
+	private void updateUI() {
+		Profile profile = Profile.getCurrentProfile();
+		if (profile != null) {
+			profilePictureView.setVisibility(View.VISIBLE);
+			profilePictureView.setProfileId(profile.getId());
+			profileName.setText(profile.getName());
+			GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+				@Override
+				public void onCompleted(JSONObject object, GraphResponse response) {
+					try {
+						if (object.has("email")) {
+							String mail = object.getString("email");
+							profileMail.setText(mail);
+							ParseUser user = ParseUser.getCurrentUser();
+							user.setEmail(mail);
+							user.saveEventually();
+						}
+					} catch (JSONException e) {
+						e.printStackTrace();
+					}
+				}
+			});
+			request.executeAsync();
+		} else {
+			profilePictureView.setVisibility(View.INVISIBLE);
+			profilePictureView.setProfileId(null);
+			profileName.setText("");
+			profileMail.setText("");
+		}
 	}
 
 	@Override
@@ -148,6 +221,10 @@ public class NavigationDrawerFragment extends Fragment {
 
 	public boolean isDrawerOpen() {
 		return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(mFragmentContainerView);
+	}
+
+	public void closeDrawer() {
+		mDrawerLayout.closeDrawer(mFragmentContainerView);
 	}
 
 	/**
@@ -163,7 +240,6 @@ public class NavigationDrawerFragment extends Fragment {
 		// set a custom shadow that overlays the main content when the drawer opens
 		mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 		// set up the drawer's list view with items and click listener
-
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
@@ -247,7 +323,7 @@ public class NavigationDrawerFragment extends Fragment {
 	public void onDetach() {
 		super.onDetach();
 		mCallbacks = null;
-
+		accessTokenTracker.stopTracking();
 	}
 
 	@Override
@@ -276,10 +352,12 @@ public class NavigationDrawerFragment extends Fragment {
 		return ((AppCompatActivity) getActivity()).getSupportActionBar();
 	}
 
+
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		callbackManager.onActivityResult(requestCode, resultCode, data);
+
+		ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
 	}
 
 	/**

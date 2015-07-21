@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.myapps.myrecipes.displayingbitmaps.ImageCache;
 import com.myapps.myrecipes.displayingbitmaps.ImageFetcher;
@@ -39,6 +40,9 @@ public class NaviagtionDrawerActivity extends AppCompatActivity
 		mNavigationDrawerFragment.setUp(
 				R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
+
+		onNavigationDrawerItemSelected(NavigationDrawerFragment.HOME_PAGE);
+
 	}
 
 	private void setUpImageLoader() {
@@ -87,11 +91,24 @@ public class NaviagtionDrawerActivity extends AppCompatActivity
 
 	private Fragment getFragment(int position) {
 		switch (position) {
-			case 0:
+			case NavigationDrawerFragment.HOME_PAGE:
+				return new HomePageFragment();
+			case NavigationDrawerFragment.TOP_RATED:
 				return TopRatedRecipesFragment.newInstance();
+			case NavigationDrawerFragment.ADD_RECIPE:
+				return new AddRecipeFragment();
 			default:
 				return TopRatedRecipesFragment.newInstance();
 		}
+	}
+
+	@Override
+	public void onBackPressed() {
+		if (mNavigationDrawerFragment.isDrawerOpen()) {
+			mNavigationDrawerFragment.closeDrawer();
+			return;
+		}
+		super.onBackPressed();
 	}
 
 	@Override
@@ -119,5 +136,9 @@ public class NaviagtionDrawerActivity extends AppCompatActivity
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	public View getToolbarView() {
+		return findViewById(R.id.toolbar);
 	}
 }
