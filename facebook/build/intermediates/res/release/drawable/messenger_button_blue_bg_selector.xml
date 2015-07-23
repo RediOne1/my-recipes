@@ -20,18 +20,18 @@
 -->
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-  <item android:state_pressed="true">
-    <shape android:shape="rectangle">
-      <corners android:radius="2dp" />
-      <solid android:color="#1f8eff" />
-    </shape>
-  </item>
+	<item android:state_pressed="true">
+		<shape android:shape="rectangle">
+			<corners android:radius="2dp"/>
+			<solid android:color="#1f8eff"/>
+		</shape>
+	</item>
 
-  <item>
-    <shape android:shape="rectangle">
-      <corners android:radius="2dp" />
-      <solid android:color="#0084ff" />
-    </shape>
-  </item>
+	<item>
+		<shape android:shape="rectangle">
+			<corners android:radius="2dp"/>
+			<solid android:color="#0084ff"/>
+		</shape>
+	</item>
 </selector>
 <!-- From: file:/home/adrian/Pulpit/Programy/android-studio/MyRecipes/facebook/res/drawable/messenger_button_blue_bg_selector.xml -->

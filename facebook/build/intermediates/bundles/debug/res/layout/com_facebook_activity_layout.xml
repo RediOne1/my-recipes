@@ -20,9 +20,10 @@
 -->
 
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:id="@+id/com_facebook_fragment_container"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-    />
+<FrameLayout
+	android:id="@+id/com_facebook_fragment_container"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	/>
 <!-- From: file:/home/adrian/Pulpit/Programy/android-studio/MyRecipes/facebook/res/layout/com_facebook_activity_layout.xml -->

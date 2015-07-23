@@ -3,10 +3,14 @@ package com.myapps.myrecipes;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
@@ -24,6 +28,7 @@ public class AddRecipeFragment extends Fragment implements ObservableScrollViewC
 	private View mToolbarView;
 	private ObservableScrollView mScrollView;
 	private int mParallaxImageHeight;
+	private EditText title;
 
 
 	@Override
@@ -44,9 +49,40 @@ public class AddRecipeFragment extends Fragment implements ObservableScrollViewC
 		mScrollView = (ObservableScrollView) view.findViewById(R.id.scroll);
 		mScrollView.setScrollViewCallbacks(this);
 
+		title = (EditText) view.findViewById(R.id.add_title_editText);
+		setupAddTitle(view);
+
 		mParallaxImageHeight = getResources().getDimensionPixelSize(
 				R.dimen.parallax_image_height);
 
+	}
+
+	private void setupAddTitle(View rootView) {
+		final TextView counter = (TextView) rootView.findViewById(R.id.add_title_counter);
+		TextView errorText = (TextView) rootView.findViewById(R.id.add_title_errorText);
+		final int titleMaxLength = getResources().getInteger(R.integer.title_max_length);
+		final String counterPattern = getResources().getString(R.string.character_counter);
+		counter.setText(String.format(counterPattern, 0, titleMaxLength));
+		title.addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
+
+			}
+
+			@Override
+			public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+			}
+
+			@Override
+			public void afterTextChanged(Editable editable) {
+				int length = editable.length();
+				counter.setText(String.format(counterPattern, length, titleMaxLength));
+				if (length > titleMaxLength)
+					counter.setTextColor(getResources().getColor(R.color.text_field_error));
+				else
+					counter.setTextColor(getResources().getColor(R.color.helper_text_light));
+			}
+		});
 	}
 
 	@Override

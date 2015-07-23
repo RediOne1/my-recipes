@@ -20,10 +20,10 @@
 -->
 
 <Button
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:id="@+id/messenger_send_button"
-  android:layout_width="58dp"
-  android:layout_height="59dp"
-  android:background="@drawable/messenger_button_white_bg_round"
-  />
+	android:id="@+id/messenger_send_button"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="58dp"
+	android:layout_height="59dp"
+	android:background="@drawable/messenger_button_white_bg_round"
+	/>
 <!-- From: file:/home/adrian/Pulpit/Programy/android-studio/MyRecipes/facebook/res/layout/messenger_button_send_white_round.xml -->

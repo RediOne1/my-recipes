@@ -20,13 +20,14 @@
 -->
 
 <FrameLayout
-  xmlns:android="http://schemas.android.com/apk/res/android"
-  android:id="@+id/messenger_send_button"
-  style="@style/MessengerButton.Blue.Small"
-  >
-  <TextView
-    android:text="@string/messenger_send_button_text"
-    style="@style/MessengerButtonText.Blue.Small"
-    />
+	android:id="@+id/messenger_send_button"
+	style="@style/MessengerButton.Blue.Small"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	>
+
+	<TextView
+		style="@style/MessengerButtonText.Blue.Small"
+		android:text="@string/messenger_send_button_text"
+		/>
 </FrameLayout>
 <!-- From: file:/home/adrian/Pulpit/Programy/android-studio/MyRecipes/facebook/res/layout/messenger_button_send_blue_small.xml -->

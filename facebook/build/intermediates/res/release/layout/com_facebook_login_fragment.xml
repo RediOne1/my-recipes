@@ -24,13 +24,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-    <ProgressBar android:indeterminate="true"
-                 android:layout_width="wrap_content"
-                 android:layout_height="50dip"
-                 android:id="@+id/com_facebook_login_activity_progress_bar"
-                 android:layout_centerInParent="true"
-                 android:visibility="gone"
-                 android:indeterminateOnly="true"
-        />
+	<ProgressBar
+		android:id="@+id/com_facebook_login_activity_progress_bar"
+		android:layout_width="wrap_content"
+		android:layout_height="50dip"
+		android:layout_centerInParent="true"
+		android:indeterminate="true"
+		android:indeterminateOnly="true"
+		android:visibility="gone"
+		/>
 </RelativeLayout>
 <!-- From: file:/home/adrian/Pulpit/Programy/android-studio/MyRecipes/facebook/res/layout/com_facebook_login_fragment.xml -->
