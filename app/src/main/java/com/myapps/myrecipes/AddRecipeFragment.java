@@ -3,6 +3,8 @@ package com.myapps.myrecipes;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -16,6 +18,13 @@ import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -27,6 +36,11 @@ public class AddRecipeFragment extends Fragment implements ObservableScrollViewC
 	private ImageView mImageView;
 	private View mToolbarView;
 	private ObservableScrollView mScrollView;
+
+	private RecyclerView categoryRecyclerView;
+	private RecyclerView.Adapter mAdapter;
+	private RecyclerView.LayoutManager mLayoutManager;
+
 	private int mParallaxImageHeight;
 	private EditText title;
 
@@ -43,18 +57,42 @@ public class AddRecipeFragment extends Fragment implements ObservableScrollViewC
 		super.onViewCreated(view, savedInstanceState);
 		mImageView = (ImageView) view.findViewById(R.id.image);
 		mToolbarView = ((NaviagtionDrawerActivity) getActivity()).getToolbarView();
-		mToolbarView.setBackgroundColor(
-				ScrollUtils.getColorWithAlpha(0, getResources().getColor(R.color.primary)));
+		/*mToolbarView.setBackgroundColor(
+				ScrollUtils.getColorWithAlpha(0, getResources().getColor(R.color.primary)));*/
 
 		mScrollView = (ObservableScrollView) view.findViewById(R.id.scroll);
 		mScrollView.setScrollViewCallbacks(this);
 
+		categoryRecyclerView = (RecyclerView) view.findViewById(R.id.add_recipe_category_gridView);
+		categoryRecyclerView.setHasFixedSize(true);
+
+		mLayoutManager = new GridLayoutManager(getActivity(), 2);
+		categoryRecyclerView.setLayoutManager(mLayoutManager);
+
+
+		displayCategories();
+
 		title = (EditText) view.findViewById(R.id.add_title_editText);
-		setupAddTitle(view);
+		//setupAddTitle(view);
 
 		mParallaxImageHeight = getResources().getDimensionPixelSize(
 				R.dimen.parallax_image_height);
 
+	}
+
+	private void displayCategories() {
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("Category");
+		query.findInBackground(new FindCallback<ParseObject>() {
+			@Override
+			public void done(List<ParseObject> list, ParseException e) {
+				List<ParseObject> categories = new ArrayList<ParseObject>();
+				mAdapter = new CategoryAdapter(getActivity(), categories);
+				categoryRecyclerView.setAdapter(mAdapter);
+				categories.addAll(list);
+				mAdapter.notifyItemRangeInserted(0, list.size());
+
+			}
+		});
 	}
 
 	private void setupAddTitle(View rootView) {

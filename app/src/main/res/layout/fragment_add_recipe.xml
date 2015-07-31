@@ -1,83 +1,19 @@
-<com.github.ksoichiro.android.observablescrollview.ObservableScrollView
-	android:id="@+id/scroll"
+<FrameLayout
+	android:id="@+id/add_recipe_conteiner"
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	tools:context="com.myapps.myrecipes.AddRecipeFragment">
 
-	<RelativeLayout
+	<android.support.v7.widget.RecyclerView
+		android:id="@+id/add_recipe_category_gridView"
+		android:layout_marginTop="?attr/actionBarSize"
+		android:scrollbars="vertical"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent">
+		android:layout_height="match_parent"/>
 
-		<ImageView
-			android:id="@+id/image"
-			android:layout_width="match_parent"
-			android:layout_height="@dimen/parallax_image_height"
-			android:adjustViewBounds="true"
-			android:src="@drawable/ic_chrome_reader_mode_black_24dp"/>
-
-		<View
-			android:id="@+id/anchor"
-			android:layout_width="match_parent"
-			android:layout_height="@dimen/parallax_image_height"
-			android:minHeight="@dimen/parallax_image_height"/>
-
-		<RelativeLayout
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_below="@+id/anchor"
-			android:elevation="4dp">
-
-			<!--Więcej info dla tego wzorca:
-			https://www.google.com/design/spec/patterns/errors.html#errors-user-input-errors-->
-
-			<LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="88dp"
-				android:orientation="vertical">
-
-				<TextView
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:paddingStart="4dp"
-					android:paddingEnd="4dp"
-					android:paddingTop="16dp"
-					android:text="@string/add_title"
-					android:textSize="12sp"/>
-
-				<EditText
-					android:id="@+id/add_title_editText"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:hint="@string/add_title"
-					android:singleLine="true"
-					android:textSize="16sp"/>
-
-				<FrameLayout
-					android:layout_width="match_parent"
-					android:paddingStart="4dp"
-					android:paddingEnd="4dp"
-					android:layout_height="wrap_content">
-
-					<TextView
-						android:id="@+id/add_title_errorText"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:textColor="@color/text_field_error"
-						android:layout_gravity="start"
-						android:textSize="12sp"/>
-
-					<TextView
-						android:id="@+id/add_title_counter"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:layout_gravity="end"
-						android:textColor="@color/helper_text_light"
-						android:textSize="12sp"/>
-				</FrameLayout>
-			</LinearLayout>
-		</RelativeLayout>
-
-	</RelativeLayout>
-</com.github.ksoichiro.android.observablescrollview.ObservableScrollView>
+	<include
+		android:visibility="gone"
+		layout="@layout/add_recipe_content"/>
+</FrameLayout>

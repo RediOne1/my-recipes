@@ -75,8 +75,11 @@ public class HomePageFragment extends Fragment {
 		query.findInBackground(new FindCallback<ParseObject>() {
 			@Override
 			public void done(List<ParseObject> list, ParseException e) {
-				if (observableGridView != null)
+				try {
 					observableGridView.setAdapter(new GridAdapter(getActivity(), list));
+				}catch (Exception ignored){
+
+				}
 			}
 		});
 	}

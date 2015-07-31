@@ -46,10 +46,10 @@ public class GridAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup viewGroup) {
+	public View getView(int position, View convertView, ViewGroup parent) {
 		ParseObject parseObject = getItem(position);
 		if (convertView == null)
-			convertView = inflater.inflate(R.layout.grid_recipe_item, viewGroup, false);
+			convertView = inflater.inflate(R.layout.grid_recipe_item, parent, false);
 
 		ImageView imageView = (ImageView) convertView.findViewById(R.id.recipe_image);
 		TextView title = (TextView) convertView.findViewById(R.id.info_text);
