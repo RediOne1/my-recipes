@@ -20,9 +20,11 @@ public class NaviagtionDrawerActivity extends AppCompatActivity
 		implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
 	private static final String IMAGE_CACHE_DIR = "images";
+	private static final String SELECTED_DRAWER_POSITION = "selected_position";
 	/**
 	 * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
 	 */
+	private int selectedDrawerPosition = 0;
 	private NavigationDrawerFragment mNavigationDrawerFragment;
 	private ImageFetcher imageFetcher;
 	private ImageResizer imageResizer;
@@ -82,6 +84,7 @@ public class NaviagtionDrawerActivity extends AppCompatActivity
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
 		// update the main content by replacing fragments
+		selectedDrawerPosition = position;
 		Fragment fragment = getFragment(position);
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager.beginTransaction()
@@ -136,6 +139,19 @@ public class NaviagtionDrawerActivity extends AppCompatActivity
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		outState.putInt(SELECTED_DRAWER_POSITION, selectedDrawerPosition);
+	}
+
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		selectedDrawerPosition = savedInstanceState.getInt(SELECTED_DRAWER_POSITION);
+		onNavigationDrawerItemSelected(selectedDrawerPosition);
 	}
 
 	public View getToolbarView() {

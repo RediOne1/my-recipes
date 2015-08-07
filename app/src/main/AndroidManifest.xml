@@ -13,29 +13,32 @@
 	<uses-permission android:name="android.permission.VIBRATE"/>
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 
+	<uses-feature android:name="android.hardware.camera"
+		android:required="true"/>
+
 	<application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+		android:allowBackup="true"
+		android:icon="@mipmap/ic_launcher"
+		android:label="@string/app_name"
+		android:theme="@style/AppTheme">
 
 		<meta-data
 			android:name="com.facebook.sdk.ApplicationId"
 			android:value="@string/facebook_app_id"/>
 
 		<activity
-            android:name=".MainActivity"
-            android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+			android:name=".MainActivity"
+			android:label="@string/app_name">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+				<category android:name="android.intent.category.LAUNCHER"/>
+			</intent-filter>
+		</activity>
 		<activity
 			android:name=".NaviagtionDrawerActivity"
 			android:label="@string/app_name">
-        </activity>
+		</activity>
 
 		<!--Dodano aby móc korzystać z facebook login / share-->
 
@@ -45,6 +48,6 @@
 				"keyboard|keyboardHidden|screenLayout|screenSize|orientation"
 			android:label="@string/app_name"
 			android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
-    </application>
+	</application>
 
 </manifest>
