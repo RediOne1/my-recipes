@@ -10,16 +10,17 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,6 +37,7 @@ import com.parse.SaveCallback;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,24 +50,20 @@ import java.util.Locale;
  */
 public class AddRecipeFragment extends Fragment implements ObservableScrollViewCallbacks {
 
-
-	private static final String SELECTED_CATEGORY_ID = "SELECTED_CATEGORY_ID";
 	private static final int REQUEST_IMAGE_CAPTURE = 1;
+	private static final String TITLE = "title";
 	private View mToolbarView;
-
-	private List<Category> categories = new ArrayList<>();
-	private RecyclerView categoryRecyclerView;
-	private RecyclerView.Adapter categoryAdapter;
 
 	private ImageView recipeImage;
 
 	private int mParallaxImageHeight;
 	private EditText title;
-	private String selectedCategoryId = null;
 	private String mCurrentPhotoPath;
 	private ParseFile photoFile;
+	private ArrayAdapter<Ingredient> ingredientArrayAdapter;
 
-	private View mainContent;
+	private static int selected_category = 0;
+	private static int selected_difficulty = 0;
 
 
 	@Override
@@ -76,10 +74,9 @@ public class AddRecipeFragment extends Fragment implements ObservableScrollViewC
 	}
 
 	@Override
-	public void onViewCreated(final View view, Bundle savedInstanceState) {
+	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
 		mToolbarView = ((NaviagtionDrawerActivity) getActivity()).getToolbarView();
-		mainContent = view.findViewById(R.id.add_recipe_main_content);
 		recipeImage = (ImageView) view.findViewById(R.id.add_recipe_image);
 		recipeImage.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -87,52 +84,67 @@ public class AddRecipeFragment extends Fragment implements ObservableScrollViewC
 				dispatchTakePictureIntent();
 			}
 		});
-		ObservableScrollView mScrollView = (ObservableScrollView) view.findViewById(R.id.scroll);
-		//mScrollView.setScrollViewCallbacks(this);
 
-		categoryRecyclerView = (RecyclerView) view.findViewById(R.id.add_recipe_category_gridView);
-		categoryRecyclerView.setHasFixedSize(true);
-		RecyclerView.LayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 2);
-		categoryRecyclerView.setLayoutManager(gridLayoutManager);
-		categoryAdapter = new CategoryAdapter(getActivity(), categories, new CategoryAdapter.OnCategoryClickListener() {
+		Spinner categorySpinner = (Spinner) view.findViewById(R.id.category_spinner);
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.categories, android.R.layout.simple_spinner_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		categorySpinner.setAdapter(adapter);
+		categorySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 			@Override
-			public void selectedCategory(Category category) {
-				selectedCategoryId = category.getObjectId();
-				Toast.makeText(getActivity(), category.getName(), Toast.LENGTH_SHORT).show();
-				displayMainContent();
+			public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+				selected_category = position;
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> adapterView) {
+
 			}
 		});
-		categoryRecyclerView.setAdapter(categoryAdapter);
+		categorySpinner.setSelection(selected_category, true);
+
+		Spinner difficultySpinner = (Spinner) view.findViewById(R.id.difficulty_spinner);
+		ArrayAdapter<CharSequence> difficultyAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.difficulty, android.R.layout.simple_spinner_item);
+		difficultyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		difficultySpinner.setAdapter(difficultyAdapter);
+		difficultySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+				selected_difficulty = position;
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> adapterView) {
+
+			}
+		});
+		difficultySpinner.setSelection(selected_difficulty, true);
+
+		final IngredientsCompletionView completionView = (IngredientsCompletionView) view.findViewById(R.id.ingredients_view);
+		if (savedInstanceState == null)
+			completionView.setPrefix(getString(R.string.ingredients));
+		ParseQuery<Ingredient> query = Ingredient.getQuery();
+		query.findInBackground(new FindCallback<Ingredient>() {
+			@Override
+			public void done(List<Ingredient> list, ParseException e) {
+				ingredientArrayAdapter = new ArrayAdapter<Ingredient>(getActivity(), android.R.layout.simple_list_item_1, list);
+				completionView.setAdapter(ingredientArrayAdapter);
+			}
+		});
+
+
+		ObservableScrollView mScrollView = (ObservableScrollView) view.findViewById(R.id.scroll);
+		mScrollView.setScrollViewCallbacks(this);
 
 		title = (EditText) view.findViewById(R.id.add_title_editText);
 		setupAddTitle(view);
-
 		mParallaxImageHeight = getResources().getDimensionPixelSize(
 				R.dimen.parallax_image_height);
-		displayCategories();
-	}
 
-	private void displayCategories() {
-		mainContent.setVisibility(View.GONE);
-		categoryRecyclerView.setVisibility(View.VISIBLE);
-		mToolbarView.setBackgroundColor(
-				ScrollUtils.getColorWithAlpha(1, getResources().getColor(R.color.primary)));
+		mToolbarView.setBackgroundColor(ScrollUtils.getColorWithAlpha(0, getResources().getColor(R.color.primary)));
 
-		ParseQuery<Category> parseQuery = Category.getQuery();
-		parseQuery.findInBackground(new FindCallback<Category>() {
-			@Override
-			public void done(List<Category> list, ParseException e) {
-				categories.addAll(list);
-				categoryAdapter.notifyItemRangeInserted(0, list.size());
-			}
-		});
-	}
-
-	private void displayMainContent() {
-		mainContent.setVisibility(View.VISIBLE);
-		categoryRecyclerView.setVisibility(View.GONE);
-		mToolbarView.setBackgroundColor(
-				ScrollUtils.getColorWithAlpha(0, getResources().getColor(R.color.primary)));
+		if (savedInstanceState != null) {
+			title.setText(savedInstanceState.getString(TITLE));
+		}
 	}
 
 	private void setupAddTitle(View rootView) {
@@ -246,7 +258,6 @@ public class AddRecipeFragment extends Fragment implements ObservableScrollViewC
 		/* Set bitmap options to scale the image decode target */
 		bmOptions.inJustDecodeBounds = false;
 		bmOptions.inSampleSize = scaleFactor;
-		bmOptions.inPurgeable = true;
 
 		/* Decode the JPEG file into a Bitmap */
 		Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
@@ -268,7 +279,7 @@ public class AddRecipeFragment extends Fragment implements ObservableScrollViewC
 		if (mCurrentPhotoPath != null) {
 			setPic();
 			galleryAddPic();
-			saveScaledPhoto(mCurrentPhotoPath);
+			/*saveScaledPhoto(mCurrentPhotoPath);*/
 			mCurrentPhotoPath = null;
 		}
 
@@ -339,6 +350,6 @@ public class AddRecipeFragment extends Fragment implements ObservableScrollViewC
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		outState.putString(SELECTED_CATEGORY_ID, selectedCategoryId);
+		outState.putString(TITLE, title.getText().toString());
 	}
 }

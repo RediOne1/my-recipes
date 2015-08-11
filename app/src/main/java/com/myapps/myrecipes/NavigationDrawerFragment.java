@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
@@ -190,17 +191,18 @@ public class NavigationDrawerFragment extends Fragment {
 			GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
 				@Override
 				public void onCompleted(JSONObject object, GraphResponse response) {
-					try {
-						if (object.has("email")) {
-							String mail = object.getString("email");
-							profileMail.setText(mail);
-							ParseUser user = ParseUser.getCurrentUser();
-							user.setEmail(mail);
-							user.saveEventually();
+					if (object != null)
+						try {
+							if (object.has("email")) {
+								String mail = object.getString("email");
+								profileMail.setText(mail);
+								ParseUser user = ParseUser.getCurrentUser();
+								user.setEmail(mail);
+								user.saveEventually();
+							}
+						} catch (JSONException e) {
+							e.printStackTrace();
 						}
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
 				}
 			});
 			request.executeAsync();
@@ -341,11 +343,8 @@ public class NavigationDrawerFragment extends Fragment {
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		if (mDrawerToggle.onOptionsItemSelected(item)) {
-			return true;
-		}
+		return mDrawerToggle.onOptionsItemSelected(item) || super.onOptionsItemSelected(item);
 
-		return super.onOptionsItemSelected(item);
 	}
 
 	private ActionBar getActionBar() {

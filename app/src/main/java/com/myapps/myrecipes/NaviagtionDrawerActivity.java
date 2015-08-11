@@ -1,6 +1,7 @@
 package com.myapps.myrecipes;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -148,7 +149,7 @@ public class NaviagtionDrawerActivity extends AppCompatActivity
 	}
 
 	@Override
-	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+	protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
 		super.onRestoreInstanceState(savedInstanceState);
 		selectedDrawerPosition = savedInstanceState.getInt(SELECTED_DRAWER_POSITION);
 		onNavigationDrawerItemSelected(selectedDrawerPosition);

@@ -21,6 +21,8 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		ParseObject.registerSubclass(Category.class);
+		ParseObject.registerSubclass(Ingredient.class);
+		Parse.enableLocalDatastore(this);
 		Parse.initialize(this, "sOtPvBFE5R8JWOcfm2gPFAUlNQLjFgadZ9KiQJMj", "jI625qcX1LCCoKaKBSMJa9dNWGzfgFhZBu3Zw5p3");
 		ParseFacebookUtils.initialize(this);
 		findViewById(R.id.start_button).setOnClickListener(new View.OnClickListener() {

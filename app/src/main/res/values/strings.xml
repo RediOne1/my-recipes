@@ -27,4 +27,8 @@
 	<string name="home_page">Strona główna</string>
 	<string name="add_title">Dodaj tytuł</string>
 	<string name="character_counter">%1$s/%2$s</string>
+	<string name="select_category">Wybierz kategorię</string>
+	<string name="select_difficulty">Wybierz poziom trudności</string>
+	<string name="select_ingredients">Wybierz składniki</string>
+	<string name="ingredients">Składniki:&#160;</string>
 </resources>

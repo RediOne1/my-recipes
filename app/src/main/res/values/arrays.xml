@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="categories">
+		<item >Ciasta</item>
+		<item >Desery</item>
+		<item >Dietetyczne</item>
+		<item >Dla dzieci</item>
+		<item >Drinki</item>
+		<item >Kanapki</item>
+		<item >Kuchnie świata</item>
+		<item >Makarony</item>
+		<item >Na Boże Narodzenie</item>
+		<item >Na Wielkanoc</item>
+		<item >Na Zime</item>
+		<item >Na szybko</item>
+		<item >Napoje</item>
+		<item >Pieczywo</item>
+		<item >Pizze</item>
+		<item >Potrawy mięsne</item>
+		<item >Potrawy z grilla</item>
+		<item >Po studencku</item>
+		<item >Przekąski</item>
+		<item >Przetwory i marynaty</item>
+		<item >Ryby i owoce morza</item>
+		<item >Sałatki</item>
+		<item >Sosy</item>
+		<item >Surówki</item>
+		<item >Wegetariańskie</item>
+		<item >Zapiekanki</item>
+		<item >Zupy</item>
+		<item >Inne</item>
+	</string-array>
+
+	<string-array name="difficulty">
+		<item >Bardzo łatwe</item>
+		<item >Łatwe</item>
+		<item >Średnie</item>
+		<item >Trudne</item>
+		<item >Bardzo trudne</item>
+	</string-array>
+</resources>
