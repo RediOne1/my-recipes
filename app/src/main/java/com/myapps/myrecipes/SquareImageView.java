@@ -4,6 +4,8 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
+import com.parse.ParseImageView;
+
 /**
  * author:  Adrian Kuta
  * index:   204423

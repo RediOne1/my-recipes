@@ -1,4 +1,4 @@
-package com.myapps.myrecipes;
+package com.myapps.myrecipes.parseobjects;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
