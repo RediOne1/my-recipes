@@ -30,5 +30,12 @@
 	<string name="select_category">Wybierz kategorię</string>
 	<string name="select_difficulty">Wybierz poziom trudności</string>
 	<string name="select_ingredients">Wybierz składniki</string>
-	<string name="ingredients">Składniki:&#160;</string>
+	<string name="ingredients">Składniki;</string>
+	<string name="title_activity_add_recipe">Add Recipe</string>
+	<string name="title_too_long">Tytuł jest za długi</string>
+	<string name="save_recipe">Zapisz przepis</string>
+	<string name="ingredient">Składnik</string>
+	<string name="abc_amount">100g</string>
+	<string name="add_ingredient">Dodaj składnik</string>
+	<string name="recipe_image">Zdjęcie przepisu</string>
 </resources>

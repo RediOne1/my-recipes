@@ -8,6 +8,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.facebook.appevents.AppEventsLogger;
+import com.myapps.myrecipes.parseobjects.Category;
+import com.myapps.myrecipes.parseobjects.Ingredient;
+import com.myapps.myrecipes.parseobjects.Recipe;
 import com.parse.Parse;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
@@ -22,6 +25,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		ParseObject.registerSubclass(Category.class);
 		ParseObject.registerSubclass(Ingredient.class);
+		ParseObject.registerSubclass(Recipe.class);
 		Parse.enableLocalDatastore(this);
 		Parse.initialize(this, "sOtPvBFE5R8JWOcfm2gPFAUlNQLjFgadZ9KiQJMj", "jI625qcX1LCCoKaKBSMJa9dNWGzfgFhZBu3Zw5p3");
 		ParseFacebookUtils.initialize(this);

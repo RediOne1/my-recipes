@@ -16,9 +16,9 @@ import android.widget.FrameLayout;
 import com.github.ksoichiro.android.observablescrollview.ObservableGridView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
+import com.myapps.myrecipes.parseobjects.Recipe;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 import com.parse.ParseQuery;
 
 import java.util.List;
@@ -71,10 +71,10 @@ public class HomePageFragment extends Fragment {
 			}
 		});
 
-		ParseQuery<ParseObject> query = ParseQuery.getQuery("Recipe");
-		query.findInBackground(new FindCallback<ParseObject>() {
+		ParseQuery<Recipe> query = Recipe.getQuery();
+		query.findInBackground(new FindCallback<Recipe>() {
 			@Override
-			public void done(List<ParseObject> list, ParseException e) {
+			public void done(List<Recipe> list, ParseException e) {
 				try {
 					observableGridView.setAdapter(new GridAdapter(getActivity(), list));
 				}catch (Exception ignored){

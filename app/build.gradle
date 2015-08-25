@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 22
+    compileSdkVersion 21
     buildToolsVersion "22.0.1"
 
     defaultConfig {
@@ -26,6 +26,6 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:22.2.1'
     compile 'com.parse.bolts:bolts-android:1.+'
     compile 'com.github.ksoichiro:android-observablescrollview:1.5.2'
-    compile "com.splitwise:tokenautocomplete:2.0.1@aar"
+    compile 'com.splitwise:tokenautocomplete:2.0.1@aar'
     compile project(':facebook')
 }

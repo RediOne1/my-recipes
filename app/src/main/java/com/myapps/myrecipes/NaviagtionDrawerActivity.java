@@ -99,8 +99,6 @@ public class NaviagtionDrawerActivity extends AppCompatActivity
 				return new HomePageFragment();
 			case NavigationDrawerFragment.TOP_RATED:
 				return TopRatedRecipesFragment.newInstance();
-			case NavigationDrawerFragment.ADD_RECIPE:
-				return new AddRecipeFragment();
 			default:
 				return TopRatedRecipesFragment.newInstance();
 		}

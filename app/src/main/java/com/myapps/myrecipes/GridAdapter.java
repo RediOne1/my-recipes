@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.myapps.myrecipes.displayingbitmaps.ImageFetcher;
-import com.parse.ParseObject;
+import com.myapps.myrecipes.parseobjects.Recipe;
 
 import java.util.List;
 
@@ -20,11 +20,11 @@ import java.util.List;
  */
 public class GridAdapter extends BaseAdapter {
 
-	private List<ParseObject> recipes;
+	private List<Recipe> recipes;
 	private LayoutInflater inflater;
 	private ImageFetcher imageFetcher;
 
-	public GridAdapter(Context context, List<ParseObject> recipes) {
+	public GridAdapter(Context context, List<Recipe> recipes) {
 		inflater = LayoutInflater.from(context);
 		this.recipes = recipes;
 		imageFetcher = ((NaviagtionDrawerActivity) context).getImageFetcher();
@@ -36,7 +36,7 @@ public class GridAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public ParseObject getItem(int position) {
+	public Recipe getItem(int position) {
 		return recipes.get(position);
 	}
 
@@ -47,15 +47,15 @@ public class GridAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		ParseObject parseObject = getItem(position);
+		Recipe recipe = getItem(position);
 		if (convertView == null)
 			convertView = inflater.inflate(R.layout.grid_recipe_item, parent, false);
 
 		ImageView imageView = (ImageView) convertView.findViewById(R.id.recipe_image);
 		TextView title = (TextView) convertView.findViewById(R.id.info_text);
 
-		imageFetcher.loadImage(parseObject.getString("image"), imageView);
-		title.setText(parseObject.getString("name"));
+		imageFetcher.loadImage(recipe.getPhotoFile().getUrl(), imageView);
+		title.setText(recipe.getName());
 
 		return convertView;
 	}

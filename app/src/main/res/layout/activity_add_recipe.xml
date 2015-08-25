@@ -1,12 +1,157 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.myapps.myrecipes.AddRecipeActivity">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+	<com.github.ksoichiro.android.observablescrollview.ObservableScrollView
+		android:id="@+id/scroll"
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:tools="http://schemas.android.com/tools"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		tools:context="com.myapps.myrecipes.AddRecipeActivity">
 
-</RelativeLayout>
+		<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent">
+
+			<FrameLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+				<ImageView
+					android:id="@+id/add_recipe_image"
+					android:layout_width="match_parent"
+					android:layout_height="@dimen/parallax_image_height"
+					android:adjustViewBounds="true"
+					android:scaleType="center"
+					android:src="@drawable/ic_add_circle_black_24dp"
+					android:contentDescription="@string/recipe_image"/>
+
+				<ProgressBar
+					android:id="@+id/progressBar"
+					style="?android:attr/progressBarStyleHorizontal"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center_horizontal|bottom"/>
+			</FrameLayout>
+
+			<View
+				android:id="@+id/anchor"
+				android:layout_width="match_parent"
+				android:layout_height="@dimen/parallax_image_height"
+				android:minHeight="@dimen/parallax_image_height"/>
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_below="@+id/anchor"
+				android:elevation="4dp"
+				android:orientation="vertical">
+
+				<!--Więcej info dla tego wzorca:
+				https://www.google.com/design/spec/patterns/errors.html#errors-user-input-errors-->
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="88dp"
+					android:orientation="vertical">
+
+					<TextView
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:paddingEnd="4dp"
+						android:paddingStart="4dp"
+						android:paddingTop="16dp"
+						android:text="@string/add_title"
+						android:textSize="12sp"/>
+
+					<EditText
+						android:id="@+id/add_title_editText"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:hint="@string/add_title"
+						android:singleLine="true"
+						android:textSize="16sp"/>
+
+					<FrameLayout
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:paddingEnd="4dp"
+						android:paddingStart="4dp">
+
+						<TextView
+							android:id="@+id/add_title_errorText"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_gravity="start"
+							android:textColor="@color/text_field_error"
+							android:textSize="12sp"/>
+
+						<TextView
+							android:id="@+id/add_title_counter"
+							android:layout_width="wrap_content"
+							android:layout_height="wrap_content"
+							android:layout_gravity="end"
+							android:textColor="@color/helper_text_light"
+							android:textSize="12sp"/>
+					</FrameLayout>
+				</LinearLayout>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:labelFor="@+id/ingredients_layout"
+					android:paddingEnd="4dp"
+					android:paddingStart="4dp"
+					android:text="@string/ingredients"
+					android:textSize="12sp"/>
+
+				<LinearLayout
+					android:id="@+id/ingredients_layout"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="vertical"/>
+
+				<Button
+					android:id="@+id/add_ingredient"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="end"
+					android:text="@string/add_ingredient"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:paddingEnd="4dp"
+					android:paddingStart="4dp"
+					android:paddingTop="16dp"
+					android:text="@string/select_category"
+					android:textSize="12sp"/>
+
+				<Spinner
+					android:id="@+id/category_spinner"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"/>
+
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:paddingEnd="4dp"
+					android:paddingStart="4dp"
+					android:paddingTop="16dp"
+					android:text="@string/select_difficulty"
+					android:textSize="12sp"/>
+
+				<Spinner
+					android:id="@+id/difficulty_spinner"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"/>
+
+
+			</LinearLayout>
+		</RelativeLayout>
+	</com.github.ksoichiro.android.observablescrollview.ObservableScrollView>
+
+	<include
+		layout="@layout/toolbar"/>
+</FrameLayout>
