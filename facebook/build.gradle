@@ -7,17 +7,17 @@ repositories {
 project.group = 'com.facebook.android'
 
 dependencies {
-    compile 'com.android.support:support-v4:[22,23)'
+    compile 'com.android.support:support-v4:23.0.0'
     compile 'com.parse.bolts:bolts-android:1.2.0'
 }
 
 android {
-    compileSdkVersion 21
-    buildToolsVersion '22.0.1'
+    compileSdkVersion 23
+    buildToolsVersion '23'
 
     defaultConfig {
-        minSdkVersion 18
-        targetSdkVersion 22
+        minSdkVersion 19
+        targetSdkVersion 23
     }
 
     lintOptions {

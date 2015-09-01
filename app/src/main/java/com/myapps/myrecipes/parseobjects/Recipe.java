@@ -39,8 +39,16 @@ public class Recipe extends ParseObject {
 		put("name", name);
 	}
 
+	public String getCategory() {
+		return getString("category");
+	}
+
 	public void setCategory(String s) {
 		put("category", s);
+	}
+
+	public String getDifficulty() {
+		return getString("difficulty");
 	}
 
 	public void setDifficulty(String s) {
@@ -51,11 +59,16 @@ public class Recipe extends ParseObject {
 		put("ingredients", s);
 	}
 
-	public void setPhotoUrl(String url) {
-		put("photoUrl", url);
+
+	public String getIngredientJSON() {
+		return getString("ingredients");
 	}
 
 	public String getPhotoUrl() {
 		return getString("photoUrl");
+	}
+
+	public void setPhotoUrl(String url) {
+		put("photoUrl", url);
 	}
 }

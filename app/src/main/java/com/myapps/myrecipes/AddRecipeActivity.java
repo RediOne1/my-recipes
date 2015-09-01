@@ -464,9 +464,19 @@ public class AddRecipeActivity extends AppCompatActivity implements ObservableSc
 			public void done(ParseException e) {
 				if (e != null) {
 					Toast.makeText(getApplicationContext(),
-							"Error saving: " + e.getMessage(),
+							"ErrorSaving: " + e.getMessage(),
 							Toast.LENGTH_LONG).show();
-				} else finish();
+				} else {
+					Intent intent = new Intent(getApplicationContext(), RecipeActivity.class);
+					intent.putExtra(RecipeActivity.RECIPE_ID, recipe.getObjectId());
+					intent.putExtra(RecipeActivity.RECIPE_NAME, recipe.getName());
+					intent.putExtra(RecipeActivity.CATEGORY, recipe.getCategory());
+					intent.putExtra(RecipeActivity.DIFFICULTY, recipe.getDifficulty());
+					intent.putExtra(RecipeActivity.INGREDIENTS, recipe.getIngredientJSON());
+					intent.putExtra(RecipeActivity.PHOTO_URL, recipe.getPhotoUrl());
+					startActivity(intent);
+					finish();
+				}
 			}
 		});
 	}

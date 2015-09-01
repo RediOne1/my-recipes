@@ -80,7 +80,15 @@ public class HomePageFragment extends Fragment {
 		observableGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				startActivity(new Intent(getActivity(), RecipeActivity.class));
+				Recipe recipe = recipeList.get(position);
+				Intent intent = new Intent(getActivity(), RecipeActivity.class);
+				intent.putExtra(RecipeActivity.RECIPE_ID, recipe.getObjectId());
+				intent.putExtra(RecipeActivity.RECIPE_NAME, recipe.getName());
+				intent.putExtra(RecipeActivity.CATEGORY, recipe.getCategory());
+				intent.putExtra(RecipeActivity.DIFFICULTY, recipe.getDifficulty());
+				intent.putExtra(RecipeActivity.INGREDIENTS, recipe.getIngredientJSON());
+				intent.putExtra(RecipeActivity.PHOTO_URL, recipe.getPhotoUrl());
+				startActivity(intent);
 			}
 		});
 		recipeList = new ArrayList<>();

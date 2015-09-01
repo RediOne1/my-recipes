@@ -295,7 +295,7 @@
 					android:layout_marginStart="@dimen/navigation_drawer_text_paddingStart"
 					android:alpha="0.87"
 					android:gravity="center_vertical"
-					android:text="@string/category"
+					android:text="@string/categories"
 					android:textSize="14sp"/>
 			</FrameLayout>
 		</LinearLayout>

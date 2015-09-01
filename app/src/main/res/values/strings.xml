@@ -19,7 +19,7 @@
 	<string name="last_added">Ostatnio dodane</string>
 	<string name="facebook_app_id">1639181196319064</string>
 	<string name="add_recipe">Dodaj przepis</string>
-	<string name="category">Kategorie</string>
+	<string name="categories">Kategorie</string>
 	<string name="settings">Ustawienia</string>
 
 	<!-- TODO: Remove or change this placeholder text -->
@@ -41,4 +41,6 @@
 	<string name="ingredients_completion_hint">Wybierz składnik lub wpisz własny</string>
 	<string name="title_activity_recipe">RecipeActivity</string>
 	<string name="title_activity_settings">Ustawienia</string>
+	<string name="category">Kategoria:</string>
+	<string name="difficulty">Trudność:</string>
 </resources>
