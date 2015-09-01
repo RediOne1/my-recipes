@@ -170,6 +170,13 @@ public class NavigationDrawerFragment extends Fragment {
 				startActivity(i);
 			}
 		});
+		view.findViewById(R.id.settings_item).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				startActivity(new Intent(getActivity(), SettingsActivity.class))
+				;
+			}
+		});
 		updateUI();
 	}
 

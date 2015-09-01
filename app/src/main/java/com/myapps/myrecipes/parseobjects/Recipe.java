@@ -46,4 +46,16 @@ public class Recipe extends ParseObject {
 	public void setDifficulty(String s) {
 		put("difficulty", s);
 	}
+
+	public void setIngredients(String s) {
+		put("ingredients", s);
+	}
+
+	public void setPhotoUrl(String url) {
+		put("photoUrl", url);
+	}
+
+	public String getPhotoUrl() {
+		return getString("photoUrl");
+	}
 }

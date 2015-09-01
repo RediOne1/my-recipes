@@ -38,4 +38,7 @@
 	<string name="abc_amount">100g</string>
 	<string name="add_ingredient">Dodaj składnik</string>
 	<string name="recipe_image">Zdjęcie przepisu</string>
+	<string name="ingredients_completion_hint">Wybierz składnik lub wpisz własny</string>
+	<string name="title_activity_recipe">RecipeActivity</string>
+	<string name="title_activity_settings">Ustawienia</string>
 </resources>

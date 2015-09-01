@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.myapps.myrecipes.displayingbitmaps.ImageFetcher;
 import com.myapps.myrecipes.parseobjects.Recipe;
+import com.parse.ParseFile;
 
 import java.util.List;
 
@@ -53,8 +54,7 @@ public class GridAdapter extends BaseAdapter {
 
 		ImageView imageView = (ImageView) convertView.findViewById(R.id.recipe_image);
 		TextView title = (TextView) convertView.findViewById(R.id.info_text);
-
-		imageFetcher.loadImage(recipe.getPhotoFile().getUrl(), imageView);
+		imageFetcher.loadImage(recipe.getPhotoUrl(), imageView);
 		title.setText(recipe.getName());
 
 		return convertView;

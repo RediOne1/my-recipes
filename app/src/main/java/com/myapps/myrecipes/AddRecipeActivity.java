@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -37,9 +38,13 @@ import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
+import com.myapps.myrecipes.parseobjects.Ingredient;
 import com.myapps.myrecipes.parseobjects.Recipe;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.ProgressCallback;
 import com.parse.SaveCallback;
@@ -52,7 +57,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class AddRecipeActivity extends AppCompatActivity implements ObservableScrollViewCallbacks {
@@ -76,6 +83,8 @@ public class AddRecipeActivity extends AppCompatActivity implements ObservableSc
 	private Spinner categorySpinner;
 	private Spinner difficultySpinner;
 	private LinearLayout ingredientsLayout;
+	private ArrayAdapter<Ingredient> ingredientsAdapter;
+	private List<Ingredient> ingredientsList;
 	private Button addIngredient;
 
 	@Override
@@ -91,6 +100,17 @@ public class AddRecipeActivity extends AppCompatActivity implements ObservableSc
 
 		progressBar = (ProgressBar) findViewById(R.id.progressBar);
 		ingredientsLayout = (LinearLayout) findViewById(R.id.ingredients_layout);
+		ingredientsList = new ArrayList<>();
+		ingredientsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, ingredientsList);
+		ParseQuery<Ingredient> parseQuery = Ingredient.getQuery();
+		parseQuery.findInBackground(new FindCallback<Ingredient>() {
+			@Override
+			public void done(List<Ingredient> list, ParseException e) {
+				ingredientsList.clear();
+				ingredientsList.addAll(list);
+				ingredientsAdapter.notifyDataSetChanged();
+			}
+		});
 		addIngredient = (Button) findViewById(R.id.add_ingredient);
 		addIngredient.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -137,7 +157,9 @@ public class AddRecipeActivity extends AppCompatActivity implements ObservableSc
 	private void addIngredient(String name, String amount) {
 		View itemView = getLayoutInflater().inflate(R.layout.single_add_ingredient_layout, ingredientsLayout, false);
 		itemView.setVisibility(View.INVISIBLE);
-		((EditText) itemView.findViewById(R.id.ingredient_name)).setText(name);
+		AutoCompleteTextView autoCompleteTextView = (AutoCompleteTextView) itemView.findViewById(R.id.ingredient_name);
+		autoCompleteTextView.setText(name);
+		autoCompleteTextView.setAdapter(ingredientsAdapter);
 		((EditText) itemView.findViewById(R.id.ingredient_amount)).setText(amount);
 		float translationY = addIngredient.getTranslationY();
 		addIngredient.setTranslationY(translationY + itemView.getHeight());
@@ -275,7 +297,7 @@ public class AddRecipeActivity extends AppCompatActivity implements ObservableSc
 		/* Figure out which way needs to be reduced less */
 		int scaleFactor = 1;
 		if ((targetW > 0) || (targetH > 0)) {
-			scaleFactor = Math.min(photoW / targetW, photoH / targetH);
+			scaleFactor = Math.max(photoW / targetW, photoH / targetH);
 		}
 
 		/* Set bitmap options to scale the image decode target */
@@ -287,6 +309,9 @@ public class AddRecipeActivity extends AppCompatActivity implements ObservableSc
 
 		/* Decode the JPEG file into a Bitmap */
 		Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
+		Log.d("DEBUG_TAG", "outWidth: " + bmOptions.outWidth + ", outHeight: " + bmOptions.outHeight);
+		Log.d("DEBUG_TAG", "bitmapWidth: " + bitmap.getWidth() + ", bitmapHeight: " + bitmap.getHeight());
+		Log.d("DEBUG_TAG", "imageWidth: " + targetW + ", imageHeight: " + targetH);
 		bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
 
 		/* Associate the Bitmap to the ImageView */
@@ -335,9 +360,6 @@ public class AddRecipeActivity extends AppCompatActivity implements ObservableSc
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-			/*Bundle extras = data.getExtras();
-			Bitmap imageBitmap = (Bitmap) extras.get("data");
-			recipeImage.setImageBitmap(imageBitmap);*/
 			handleBigCameraPhoto();
 		}
 	}
@@ -409,34 +431,68 @@ public class AddRecipeActivity extends AppCompatActivity implements ObservableSc
 		if (id == R.id.action_settings) {
 			return true;
 		} else if (id == R.id.action_save) {
-			saveScaledPhoto(mCurrentPhotoPath, new SaveCallback() {
+			if (mCurrentPhotoPath != null)
+				saveScaledPhoto(mCurrentPhotoPath, new SaveCallback() {
 
-				public void done(ParseException e) {
-					if (e != null) {
-						Toast.makeText(getApplicationContext(),
-								"Error saving: " + e.getMessage(),
-								Toast.LENGTH_LONG).show();
-					} else {
-						recipe.setPhotoFile(photoFile);
-						recipe.setName(title.getText().toString());
-						recipe.setCategory(categorySpinner.getSelectedItem().toString());
-						recipe.setDifficulty(difficultySpinner.getSelectedItem().toString());
-						recipe.saveEventually(new SaveCallback() {
-							@Override
-							public void done(ParseException e) {
-								if (e != null) {
-									Toast.makeText(getApplicationContext(),
-											"Error saving: " + e.getMessage(),
-											Toast.LENGTH_LONG).show();
-								} else finish();
-							}
-						});
+					public void done(ParseException e) {
+						if (e != null) {
+							Toast.makeText(getApplicationContext(),
+									"Error saving: " + e.getMessage(),
+									Toast.LENGTH_LONG).show();
+						} else {
+							recipe.setPhotoFile(photoFile);
+							recipe.setPhotoUrl(photoFile.getUrl());
+							saveRecipe();
+						}
 					}
-				}
-			});
+				});
+			else
+				saveRecipe();
 		}
-
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void saveRecipe() {
+		saveNewIngredients();
+		recipe.setName(title.getText().toString());
+		recipe.setCategory(categorySpinner.getSelectedItem().toString());
+		recipe.setDifficulty(difficultySpinner.getSelectedItem().toString());
+		recipe.setIngredients(ingredientsToStringJSON());
+		recipe.pinInBackground();
+		recipe.saveEventually(new SaveCallback() {
+			@Override
+			public void done(ParseException e) {
+				if (e != null) {
+					Toast.makeText(getApplicationContext(),
+							"Error saving: " + e.getMessage(),
+							Toast.LENGTH_LONG).show();
+				} else finish();
+			}
+		});
+	}
+
+	private void saveNewIngredients() {
+		List<Ingredient> newIngredients = new ArrayList<>();
+		int ingredientsCount = ingredientsLayout.getChildCount();
+		for (int i = 0; i < ingredientsCount; i++) {
+			View itemView = ingredientsLayout.getChildAt(i);
+			AutoCompleteTextView textView = (AutoCompleteTextView) itemView.findViewById(R.id.ingredient_name);
+			String name = textView.getText().toString();
+			if (!ingredientsListContains(name)) {
+				Ingredient ingredient = new Ingredient();
+				ingredient.setName(name);
+				newIngredients.add(ingredient);
+			}
+		}
+		ParseObject.saveAllInBackground(newIngredients);
+	}
+
+	private boolean ingredientsListContains(String name) {
+		for (Ingredient ingredient : ingredientsList) {
+			if (ingredient.toString().equals(name))
+				return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -451,6 +507,22 @@ public class AddRecipeActivity extends AppCompatActivity implements ObservableSc
 		BitmapDrawable drawable = (BitmapDrawable) recipeImage.getDrawable();
 		if (drawable != null)
 			outState.putParcelable(BITMAP, drawable.getBitmap());
+	}
+
+	@Override
+	protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		title.setText(savedInstanceState.getString(TITLE, ""));
+		categorySpinner.setSelection(savedInstanceState.getInt(SELECTED_CATEGORY), true);
+		difficultySpinner.setSelection(savedInstanceState.getInt(SELECTED_DIFFICULTY), true);
+		String jsonIngredients = savedInstanceState.getString(INGREDIENTS);
+		addIngredientsFromJSON(jsonIngredients);
+		mCurrentPhotoPath = savedInstanceState.getString(PHOTO_PATH, null);
+		Bitmap bitmap = savedInstanceState.getParcelable(BITMAP);
+		if (bitmap != null) {
+			recipeImage.setImageBitmap(bitmap);
+			recipeImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
+		}
 	}
 
 	private String ingredientsToStringJSON() {
@@ -478,22 +550,6 @@ public class AddRecipeActivity extends AppCompatActivity implements ObservableSc
 		return ingredientJSONObject.toString();
 	}
 
-	@Override
-	protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
-		super.onRestoreInstanceState(savedInstanceState);
-		title.setText(savedInstanceState.getString(TITLE, ""));
-		categorySpinner.setSelection(savedInstanceState.getInt(SELECTED_CATEGORY), true);
-		difficultySpinner.setSelection(savedInstanceState.getInt(SELECTED_DIFFICULTY), true);
-		String jsonIngredients = savedInstanceState.getString(INGREDIENTS);
-		addIngredientsFromJSON(jsonIngredients);
-		mCurrentPhotoPath = savedInstanceState.getString(PHOTO_PATH, null);
-		Bitmap bitmap = savedInstanceState.getParcelable(BITMAP);
-		if (bitmap != null) {
-			recipeImage.setImageBitmap(bitmap);
-			recipeImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
-		}
-	}
-
 	private void addIngredientsFromJSON(String jsonIngredients) {
 		try {
 			JSONObject jsonObject = new JSONObject(jsonIngredients);
@@ -505,7 +561,7 @@ public class AddRecipeActivity extends AppCompatActivity implements ObservableSc
 				addIngredient(name, amount);
 			}
 		} catch (JSONException e) {
-
+			e.printStackTrace();
 		}
 	}
 }

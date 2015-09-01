@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<PreferenceCategory
+		android:key="@string/key_local_data_store_category"
+		android:title="@string/local_data_store"/>
+
+	<Preference
+		android:key="@string/key_clear_local_data_store"
+		android:summary="@string/clear_local_data_store_summary"
+		android:title="@string/clear_local_data_store"/>
+</PreferenceScreen>

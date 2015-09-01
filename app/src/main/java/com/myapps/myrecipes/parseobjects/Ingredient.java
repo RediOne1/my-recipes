@@ -16,6 +16,10 @@ public class Ingredient extends ParseObject {
 		return getString("name");
 	}
 
+	public void setName(String name) {
+		put("name", name);
+	}
+
 	public static ParseQuery<Ingredient> getQuery() {
 		return ParseQuery.getQuery(Ingredient.class);
 	}

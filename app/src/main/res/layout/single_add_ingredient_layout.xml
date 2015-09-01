@@ -9,6 +9,8 @@
 		android:id="@+id/ingredient_name"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:completionThreshold="2"
+		android:completionHint="@string/ingredients_completion_hint"
 		android:layout_alignParentStart="true"
 		android:layout_toStartOf="@+id/ingredient_amount"
 		android:hint="@string/ingredient"

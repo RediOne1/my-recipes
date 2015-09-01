@@ -172,8 +172,8 @@
 			<FrameLayout
 				android:id="@+id/add_recipe_item"
 				android:layout_width="match_parent"
-				android:background="?attr/selectableItemBackground"
 				android:layout_height="48dp"
+				android:background="?attr/selectableItemBackground"
 				android:paddingEnd="16dp"
 				android:paddingStart="16dp">
 
@@ -317,6 +317,7 @@
 			android:paddingBottom="8dp">
 
 			<FrameLayout
+				android:id="@+id/settings_item"
 				android:layout_width="match_parent"
 				android:layout_height="48dp"
 				android:paddingEnd="16dp"

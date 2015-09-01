@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="clear_local_data_store_summary">Usuwa wszystkie przepisy zapisane lokalnie.</string>
+	<string name="clear_local_data_store">Wyczyść bazę danych</string>
+	<string name="local_data_store">Wewnętrzna baza danych</string>
+	<string name="key_local_data_store_category">category_local_data_store</string>
+	<string name="key_clear_local_data_store">key_clear_local_data_store</string>
+</resources>

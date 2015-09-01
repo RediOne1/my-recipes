@@ -3,6 +3,7 @@ package com.myapps.myrecipes;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,6 +36,7 @@ public class MainActivity extends Activity {
 				startActivity(new Intent(MainActivity.this, NaviagtionDrawerActivity.class));
 			}
 		});
+		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 	}
 
 	@Override

@@ -3,6 +3,7 @@ package com.myapps.myrecipes;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -11,7 +12,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableGridView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
@@ -21,6 +24,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -32,6 +36,9 @@ public class HomePageFragment extends Fragment {
 
 	private ObservableGridView observableGridView;
 	private View toolbar;
+	private GridAdapter gridAdapter;
+	private List<Recipe> recipeList;
+	private ParseQuery<Recipe> query;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -70,15 +77,38 @@ public class HomePageFragment extends Fragment {
 				}
 			}
 		});
-
-		ParseQuery<Recipe> query = Recipe.getQuery();
+		observableGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				startActivity(new Intent(getActivity(), RecipeActivity.class));
+			}
+		});
+		recipeList = new ArrayList<>();
+		gridAdapter = new GridAdapter(getActivity(), recipeList);
+		observableGridView.setAdapter(gridAdapter);
+		query = Recipe.getQuery();
 		query.findInBackground(new FindCallback<Recipe>() {
 			@Override
 			public void done(List<Recipe> list, ParseException e) {
-				try {
-					observableGridView.setAdapter(new GridAdapter(getActivity(), list));
-				}catch (Exception ignored){
-
+				if (e != null) {
+					Toast.makeText(getActivity(),
+							"Error saving: " + e.getMessage(),
+							Toast.LENGTH_LONG).show();
+					query.fromLocalDatastore();
+					query.findInBackground(new FindCallback<Recipe>() {
+						@Override
+						public void done(List<Recipe> list, ParseException e) {
+							if (e == null) {
+								recipeList.clear();
+								recipeList.addAll(list);
+								gridAdapter.notifyDataSetChanged();
+							}
+						}
+					});
+				} else {
+					recipeList.clear();
+					recipeList.addAll(list);
+					gridAdapter.notifyDataSetChanged();
 				}
 			}
 		});
