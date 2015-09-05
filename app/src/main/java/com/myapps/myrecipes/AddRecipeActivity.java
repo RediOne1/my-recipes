@@ -71,6 +71,7 @@ public class AddRecipeActivity extends AppCompatActivity implements ObservableSc
 	private static final String BITMAP = "bitmap";
 	private static final String PHOTO_PATH = "path";
 	private static final String INGREDIENTS = "ingredients";
+	private static final String DESCRIPTION = "description";
 
 	private Toolbar toolbar;
 	private ImageView recipeImage;
@@ -82,6 +83,7 @@ public class AddRecipeActivity extends AppCompatActivity implements ObservableSc
 	private Recipe recipe;
 	private Spinner categorySpinner;
 	private Spinner difficultySpinner;
+	private EditText description;
 	private LinearLayout ingredientsLayout;
 	private ArrayAdapter<Ingredient> ingredientsAdapter;
 	private List<Ingredient> ingredientsList;
@@ -141,6 +143,7 @@ public class AddRecipeActivity extends AppCompatActivity implements ObservableSc
 		ObservableScrollView mScrollView = (ObservableScrollView) findViewById(R.id.scroll);
 		mScrollView.setScrollViewCallbacks(this);
 
+		description = (EditText) findViewById(R.id.add_recipe_description);
 		title = (EditText) findViewById(R.id.add_title_editText);
 		setupAddTitle();
 		mParallaxImageHeight = getResources().getDimensionPixelSize(
@@ -458,6 +461,7 @@ public class AddRecipeActivity extends AppCompatActivity implements ObservableSc
 		recipe.setCategory(categorySpinner.getSelectedItem().toString());
 		recipe.setDifficulty(difficultySpinner.getSelectedItem().toString());
 		recipe.setIngredients(ingredientsToStringJSON());
+		recipe.setDescription(description.getText().toString());
 		recipe.pinInBackground();
 		recipe.saveEventually(new SaveCallback() {
 			@Override
@@ -474,6 +478,7 @@ public class AddRecipeActivity extends AppCompatActivity implements ObservableSc
 					intent.putExtra(RecipeActivity.DIFFICULTY, recipe.getDifficulty());
 					intent.putExtra(RecipeActivity.INGREDIENTS, recipe.getIngredientJSON());
 					intent.putExtra(RecipeActivity.PHOTO_URL, recipe.getPhotoUrl());
+					intent.putExtra(RecipeActivity.DESCRIPTION, recipe.getDescription());
 					startActivity(intent);
 					finish();
 				}
@@ -514,6 +519,7 @@ public class AddRecipeActivity extends AppCompatActivity implements ObservableSc
 		String ingredients = ingredientsToStringJSON();
 		outState.putString(PHOTO_PATH, mCurrentPhotoPath);
 		outState.putString(INGREDIENTS, ingredients);
+		outState.putString(DESCRIPTION, description.getText().toString());
 		BitmapDrawable drawable = (BitmapDrawable) recipeImage.getDrawable();
 		if (drawable != null)
 			outState.putParcelable(BITMAP, drawable.getBitmap());
@@ -525,6 +531,7 @@ public class AddRecipeActivity extends AppCompatActivity implements ObservableSc
 		title.setText(savedInstanceState.getString(TITLE, ""));
 		categorySpinner.setSelection(savedInstanceState.getInt(SELECTED_CATEGORY), true);
 		difficultySpinner.setSelection(savedInstanceState.getInt(SELECTED_DIFFICULTY), true);
+		description.setText(savedInstanceState.getString(DESCRIPTION, ""));
 		String jsonIngredients = savedInstanceState.getString(INGREDIENTS);
 		addIngredientsFromJSON(jsonIngredients);
 		mCurrentPhotoPath = savedInstanceState.getString(PHOTO_PATH, null);

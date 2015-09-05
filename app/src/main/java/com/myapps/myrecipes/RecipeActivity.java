@@ -11,7 +11,9 @@ import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
@@ -19,11 +21,14 @@ import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.myapps.myrecipes.displayingbitmaps.ImageCache;
 import com.myapps.myrecipes.displayingbitmaps.ImageFetcher;
+import com.myapps.myrecipes.parseobjects.Rating;
 import com.myapps.myrecipes.parseobjects.Recipe;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,6 +42,7 @@ public class RecipeActivity extends AppCompatActivity implements ObservableScrol
 	public static final String DIFFICULTY = "difficulty";
 	public static final String INGREDIENTS = "ingredients";
 	public static final String PHOTO_URL = "photo_url";
+	public static final String DESCRIPTION = "description";
 
 	private static final float MAX_TEXT_SCALE_DELTA = 0.3f;
 	private static final String IMAGE_CACHE_DIR = "images";
@@ -52,7 +58,7 @@ public class RecipeActivity extends AppCompatActivity implements ObservableScrol
 	private LinearLayout ingredientsLayout;
 	private TextView category;
 	private TextView difficulty;
-	private ObservableScrollView mScrollView;
+	private TextView description;
 
 	private ImageFetcher imageFetcher;
 
@@ -70,12 +76,13 @@ public class RecipeActivity extends AppCompatActivity implements ObservableScrol
 
 		mImageView = (ImageView) findViewById(R.id.image);
 		mOverlayView = findViewById(R.id.overlay);
-		mScrollView = (ObservableScrollView) findViewById(R.id.scroll);
+		ObservableScrollView mScrollView = (ObservableScrollView) findViewById(R.id.scroll);
 		mScrollView.setScrollViewCallbacks(this);
 		mTitleView = (TextView) findViewById(R.id.title);
 		ingredientsLayout = (LinearLayout) findViewById(R.id.recipe_activity_ingredients_layout);
 		category = (TextView) findViewById(R.id.category_name);
 		difficulty = (TextView) findViewById(R.id.difficulty_name);
+		description = (TextView) findViewById(R.id.recipe_activity_description);
 		mFab = findViewById(R.id.fab);
 		mFab.setScaleX(0);
 		mFab.setScaleY(0);
@@ -93,6 +100,7 @@ public class RecipeActivity extends AppCompatActivity implements ObservableScrol
 			mTitleView.setText(bundle.getString(RECIPE_NAME));
 			category.setText(bundle.getString(CATEGORY));
 			difficulty.setText(bundle.getString(DIFFICULTY));
+			description.setText(bundle.getString(DESCRIPTION));
 			displayIngredientsFromJSON(bundle.getString(INGREDIENTS));
 			String photoUrl = bundle.getString(PHOTO_URL);
 			if (photoUrl != null)
@@ -106,10 +114,30 @@ public class RecipeActivity extends AppCompatActivity implements ObservableScrol
 						mTitleView.setText(recipe.getName());
 						category.setText(recipe.getCategory());
 						difficulty.setText(recipe.getDifficulty());
+						description.setText(recipe.getDescription());
 						displayIngredientsFromJSON(recipe.getIngredientJSON());
 						String photoUrl = recipe.getPhotoUrl();
 						if (photoUrl != null)
 							imageFetcher.loadImage(photoUrl, mImageView);
+					}
+				});
+
+				RatingBar ratingBar = (RatingBar) findViewById(R.id.recipeRatingBar);
+				ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+					@Override
+					public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+						Rating ratingObject = new Rating();
+						ratingObject.setRating(rating);
+						ratingObject.setUser(ParseUser.getCurrentUser());
+						ratingObject.put("recipe", recipeId);
+						ratingObject.saveEventually(new SaveCallback() {
+							@Override
+							public void done(ParseException e) {
+								if (e != null) {
+									Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+								}
+							}
+						});
 					}
 				});
 			}

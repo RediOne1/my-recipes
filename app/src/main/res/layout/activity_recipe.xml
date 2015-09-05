@@ -45,7 +45,15 @@
 					android:background="@color/primaryLight"
 					android:padding="10dp">
 
+					<RatingBar
+						android:id="@+id/recipeRatingBar"
+						android:layout_width="wrap_content"
+						android:stepSize="0.5"
+						android:layout_centerHorizontal="true"
+						android:layout_height="wrap_content"/>
+
 					<TextView
+						android:layout_below="@+id/recipeRatingBar"
 						android:id="@+id/category_label"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
@@ -53,6 +61,7 @@
 
 					<TextView
 						android:id="@+id/category_name"
+						android:layout_below="@+id/recipeRatingBar"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:layout_marginStart="5dp"

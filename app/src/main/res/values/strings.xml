@@ -43,4 +43,5 @@
 	<string name="title_activity_settings">Ustawienia</string>
 	<string name="category">Kategoria:</string>
 	<string name="difficulty">Trudność:</string>
+	<string name="description">Opis:</string>
 </resources>
