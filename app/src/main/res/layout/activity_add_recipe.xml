@@ -59,8 +59,8 @@
 					<TextView
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
-						android:paddingEnd="4dp"
-						android:paddingStart="4dp"
+						android:paddingRight="4dp"
+						android:paddingLeft="4dp"
 						android:paddingTop="16dp"
 						android:text="@string/add_title"
 						android:textSize="12sp"/>
@@ -101,8 +101,8 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:labelFor="@+id/ingredients_layout"
-					android:paddingEnd="4dp"
-					android:paddingStart="4dp"
+					android:paddingRight="4dp"
+					android:paddingLeft="4dp"
 					android:text="@string/ingredients"
 					android:textSize="12sp"/>
 
@@ -122,8 +122,8 @@
 				<TextView
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:paddingEnd="4dp"
-					android:paddingStart="4dp"
+					android:paddingRight="4dp"
+					android:paddingLeft="4dp"
 					android:paddingTop="16dp"
 					android:text="@string/select_category"
 					android:textSize="12sp"/>
@@ -136,8 +136,8 @@
 				<TextView
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:paddingEnd="4dp"
-					android:paddingStart="4dp"
+					android:paddingRight="4dp"
+					android:paddingLeft="4dp"
 					android:paddingTop="16dp"
 					android:text="@string/select_difficulty"
 					android:textSize="12sp"/>
@@ -150,8 +150,8 @@
 				<TextView
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:paddingEnd="4dp"
-					android:paddingStart="4dp"
+					android:paddingRight="4dp"
+					android:paddingLeft="4dp"
 					android:paddingTop="16dp"
 					android:labelFor="@+id/add_recipe_description"
 					android:text="@string/description"

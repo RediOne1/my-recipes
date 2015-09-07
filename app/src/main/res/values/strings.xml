@@ -44,4 +44,7 @@
 	<string name="category">Kategoria:</string>
 	<string name="difficulty">Trudność:</string>
 	<string name="description">Opis:</string>
+	<string name="settings_icon">Settings icon</string>
+	<string name="categories_icon">Categories icon</string>
+	<string name="drawer_top_image">Drawer top image</string>
 </resources>

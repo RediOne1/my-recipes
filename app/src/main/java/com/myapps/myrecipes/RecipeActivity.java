@@ -23,6 +23,7 @@ import com.myapps.myrecipes.displayingbitmaps.ImageCache;
 import com.myapps.myrecipes.displayingbitmaps.ImageFetcher;
 import com.myapps.myrecipes.parseobjects.Rating;
 import com.myapps.myrecipes.parseobjects.Recipe;
+import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -236,10 +237,10 @@ public class RecipeActivity extends AppCompatActivity implements ObservableScrol
 		int maxTitleTranslationY = (int) (mFlexibleSpaceImageHeight - mTitleView.getHeight() * scale);
 		int titleTranslationY = maxTitleTranslationY - scrollY;
 		mTitleView.setTranslationY(Math.max(titleTranslationY, 0));
-		if (mTitleView.getTranslationY() == 0)
+		/*if (mTitleView.getTranslationY() == 0)
 			mTitleView.setBackground(mOverlayView.getBackground());
 		else
-			mTitleView.setBackground(null);
+			mTitleView.setBackground(null);*/
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
 			mTitleView.setElevation(ScrollUtils.getFloat(-mFlexibleSpaceImageHeight + scrollY, 0, 15));
 

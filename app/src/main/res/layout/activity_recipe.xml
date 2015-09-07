@@ -48,24 +48,26 @@
 					<RatingBar
 						android:id="@+id/recipeRatingBar"
 						android:layout_width="wrap_content"
-						android:stepSize="0.5"
+						android:layout_height="wrap_content"
 						android:layout_centerHorizontal="true"
-						android:layout_height="wrap_content"/>
+						android:stepSize="0.5"/>
 
 					<TextView
-						android:layout_below="@+id/recipeRatingBar"
 						android:id="@+id/category_label"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
+						android:layout_below="@+id/recipeRatingBar"
 						android:text="@string/category"/>
 
 					<TextView
 						android:id="@+id/category_name"
-						android:layout_below="@+id/recipeRatingBar"
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
+						android:layout_below="@+id/recipeRatingBar"
+						android:layout_marginLeft="5dp"
 						android:layout_marginStart="5dp"
-						android:layout_toEndOf="@+id/category_label"/>
+						android:layout_toEndOf="@+id/category_label"
+						android:layout_toRightOf="@+id/category_label"/>
 
 					<TextView
 						android:id="@+id/difficulty_label"
@@ -80,9 +82,11 @@
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
 						android:layout_below="@+id/category_label"
+						android:layout_marginLeft="5dp"
 						android:layout_marginStart="5dp"
 						android:layout_marginTop="5dp"
-						android:layout_toEndOf="@+id/difficulty_label"/>
+						android:layout_toEndOf="@+id/difficulty_label"
+						android:layout_toRightOf="@+id/difficulty_label"/>
 				</RelativeLayout>
 
 				<LinearLayout
@@ -113,8 +117,8 @@
 			android:gravity="center_vertical"
 			android:maxLines="1"
 			android:minHeight="?attr/actionBarSize"
-			android:paddingEnd="@dimen/margin_standard"
-			android:paddingStart="@dimen/margin_standard"
+			android:paddingLeft="@dimen/margin_standard"
+			android:paddingRight="@dimen/margin_standard"
 			android:textColor="@android:color/white"
 			android:textSize="26sp"/>
 

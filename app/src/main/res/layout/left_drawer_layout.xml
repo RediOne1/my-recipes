@@ -20,6 +20,7 @@
 				android:layout_width="match_parent"
 				android:layout_height="173dp"
 				android:adjustViewBounds="true"
+				android:contentDescription="@string/drawer_top_image"
 				android:scaleType="centerCrop"/>
 
 			<LinearLayout
@@ -33,14 +34,16 @@
 					android:layout_width="56dp"
 					android:layout_height="56dp"
 					android:layout_gravity="start|top"
-					android:layout_marginStart="16dp"
+					android:layout_marginLeft="@dimen/drawer_list_left_margin"
+					android:layout_marginStart="@dimen/drawer_list_left_margin"
 					android:visibility="invisible"/>
 
 				<TextView
 					android:id="@+id/profile_name"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:layout_marginStart="16dp"
+					android:layout_marginLeft="@dimen/drawer_list_left_margin"
+					android:layout_marginStart="@dimen/drawer_list_left_margin"
 					android:layout_marginTop="16dp"
 					android:textSize="14sp"
 					android:textStyle="bold"/>
@@ -49,7 +52,8 @@
 					android:id="@+id/profile_mail"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:layout_marginStart="16dp"
+					android:layout_marginLeft="@dimen/drawer_list_left_margin"
+					android:layout_marginStart="@dimen/drawer_list_left_margin"
 					android:layout_marginTop="5dp"
 					android:textSize="14sp"/>
 
@@ -76,11 +80,13 @@
 				android:layout_height="wrap_content"
 				android:layout_gravity="center_vertical"
 				android:adjustViewBounds="true"
-				android:alpha="0.54"/>
+				android:alpha="0.54"
+				android:contentDescription="@string/home_page"/>
 
 			<TextView
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"
+				android:layout_marginLeft="@dimen/navigation_drawer_text_paddingStart"
 				android:layout_marginStart="@dimen/navigation_drawer_text_paddingStart"
 				android:alpha="0.87"
 				android:gravity="center_vertical"
@@ -107,8 +113,8 @@
 				android:layout_height="48dp"
 				android:alpha="0.54"
 				android:gravity="center_vertical"
-				android:paddingEnd="16dp"
-				android:paddingStart="16dp"
+				android:paddingLeft="@dimen/drawer_list_left_margin"
+				android:paddingRight="@dimen/drawer_list_left_margin"
 				android:text="@string/my_recipe_book"
 				android:textSize="14sp"/>
 		</LinearLayout>
@@ -133,11 +139,13 @@
 					android:layout_gravity="center_vertical"
 					android:adjustViewBounds="true"
 					android:alpha="0.54"
+					android:contentDescription="@string/favourite_recipes"
 					android:src="@drawable/ic_favorite_black_24dp"/>
 
 				<TextView
 					android:layout_width="match_parent"
 					android:layout_height="match_parent"
+					android:layout_marginLeft="@dimen/navigation_drawer_text_paddingStart"
 					android:layout_marginStart="@dimen/navigation_drawer_text_paddingStart"
 					android:alpha="0.87"
 					android:gravity="center_vertical"
@@ -157,11 +165,13 @@
 					android:layout_gravity="center_vertical"
 					android:adjustViewBounds="true"
 					android:alpha="0.54"
+					android:contentDescription="@string/my_recipes"
 					android:src="@drawable/ic_chrome_reader_mode_black_24dp"/>
 
 				<TextView
 					android:layout_width="match_parent"
 					android:layout_height="match_parent"
+					android:layout_marginLeft="@dimen/navigation_drawer_text_paddingStart"
 					android:layout_marginStart="@dimen/navigation_drawer_text_paddingStart"
 					android:alpha="0.87"
 					android:gravity="center_vertical"
@@ -183,11 +193,13 @@
 					android:layout_gravity="center_vertical"
 					android:adjustViewBounds="true"
 					android:alpha="0.54"
+					android:contentDescription="@string/add_recipe"
 					android:src="@drawable/ic_add_circle_black_24dp"/>
 
 				<TextView
 					android:layout_width="match_parent"
 					android:layout_height="match_parent"
+					android:layout_marginLeft="@dimen/navigation_drawer_text_paddingStart"
 					android:layout_marginStart="@dimen/navigation_drawer_text_paddingStart"
 					android:alpha="0.87"
 					android:gravity="center_vertical"
@@ -215,8 +227,8 @@
 				android:layout_height="48dp"
 				android:alpha="0.54"
 				android:gravity="center_vertical"
-				android:paddingEnd="16dp"
-				android:paddingStart="16dp"
+				android:paddingLeft="16dp"
+				android:paddingRight="16dp"
 				android:text="@string/all_recipes"
 				android:textSize="14sp"/>
 		</LinearLayout>
@@ -239,11 +251,13 @@
 					android:layout_gravity="center_vertical"
 					android:adjustViewBounds="true"
 					android:alpha="0.54"
+					android:contentDescription="@string/top_rated"
 					android:src="@drawable/ic_grade_black_24dp"/>
 
 				<TextView
 					android:layout_width="match_parent"
 					android:layout_height="match_parent"
+					android:layout_marginLeft="@dimen/navigation_drawer_text_paddingStart"
 					android:layout_marginStart="@dimen/navigation_drawer_text_paddingStart"
 					android:alpha="0.87"
 					android:gravity="center_vertical"
@@ -263,11 +277,13 @@
 					android:layout_gravity="center_vertical"
 					android:adjustViewBounds="true"
 					android:alpha="0.54"
+					android:contentDescription="@string/last_added"
 					android:src="@drawable/ic_history_black_24dp"/>
 
 				<TextView
 					android:layout_width="match_parent"
 					android:layout_height="match_parent"
+					android:layout_marginLeft="@dimen/navigation_drawer_text_paddingStart"
 					android:layout_marginStart="@dimen/navigation_drawer_text_paddingStart"
 					android:alpha="0.87"
 					android:gravity="center_vertical"
@@ -287,11 +303,13 @@
 					android:layout_gravity="center_vertical"
 					android:adjustViewBounds="true"
 					android:alpha="0.54"
+					android:contentDescription="@string/categories"
 					android:src="@drawable/ic_list_black_24dp"/>
 
 				<TextView
 					android:layout_width="match_parent"
 					android:layout_height="match_parent"
+					android:layout_marginLeft="@dimen/navigation_drawer_text_paddingStart"
 					android:layout_marginStart="@dimen/navigation_drawer_text_paddingStart"
 					android:alpha="0.87"
 					android:gravity="center_vertical"
@@ -329,11 +347,13 @@
 					android:layout_gravity="center_vertical"
 					android:adjustViewBounds="true"
 					android:alpha="0.54"
+					android:contentDescription="@string/settings"
 					android:src="@drawable/ic_settings_black_24dp"/>
 
 				<TextView
 					android:layout_width="match_parent"
 					android:layout_height="match_parent"
+					android:layout_marginLeft="@dimen/navigation_drawer_text_paddingStart"
 					android:layout_marginStart="@dimen/navigation_drawer_text_paddingStart"
 					android:alpha="0.87"
 					android:gravity="center_vertical"
