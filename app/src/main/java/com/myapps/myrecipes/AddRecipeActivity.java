@@ -3,6 +3,7 @@ package com.myapps.myrecipes;
 import android.animation.Animator;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -14,11 +15,13 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,8 +41,10 @@ import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
+import com.melnykov.fab.FloatingActionButton;
 import com.myapps.myrecipes.parseobjects.Ingredient;
 import com.myapps.myrecipes.parseobjects.Recipe;
+import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -88,6 +93,11 @@ public class AddRecipeActivity extends AppCompatActivity implements ObservableSc
 	private ArrayAdapter<Ingredient> ingredientsAdapter;
 	private List<Ingredient> ingredientsList;
 	private Button addIngredient;
+	private FloatingActionButton fab;
+	private boolean mFabIsShown;
+	private int mActionBarSize;
+	private int mFabMargin;
+	private int mFlexibleSpaceShowFabOffset;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -96,9 +106,18 @@ public class AddRecipeActivity extends AppCompatActivity implements ObservableSc
 
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
-
+		mActionBarSize = getActionBarSize();
+		mFabMargin = getResources().getDimensionPixelSize(R.dimen.margin_standard);
+		mFlexibleSpaceShowFabOffset = getResources().getDimensionPixelSize(R.dimen.flexible_space_show_fab_offset);
 		recipe = new Recipe();
 		recipe.setAuthor(ParseUser.getCurrentUser());
+		fab = (FloatingActionButton) findViewById(R.id.fab_add_photo);
+		fab.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				dispatchTakePictureIntent();
+			}
+		});
 
 		progressBar = (ProgressBar) findViewById(R.id.progressBar);
 		ingredientsLayout = (LinearLayout) findViewById(R.id.ingredients_layout);
@@ -122,13 +141,6 @@ public class AddRecipeActivity extends AppCompatActivity implements ObservableSc
 		});
 
 		recipeImage = (ImageView) findViewById(R.id.add_recipe_image);
-		recipeImage.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				dispatchTakePictureIntent();
-				recipeImage.setScaleType(ImageView.ScaleType.CENTER_CROP);
-			}
-		});
 
 		categorySpinner = (Spinner) findViewById(R.id.category_spinner);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.categories, android.R.layout.simple_spinner_item);
@@ -149,8 +161,14 @@ public class AddRecipeActivity extends AppCompatActivity implements ObservableSc
 		mParallaxImageHeight = getResources().getDimensionPixelSize(
 				R.dimen.parallax_image_height);
 
-		toolbar.setBackgroundColor(ScrollUtils.getColorWithAlpha(0, getResources().getColor(R.color.primary)));
+		toolbar.setBackgroundColor(ScrollUtils.getColorWithAlpha(0, ContextCompat.getColor(this, R.color.primary)));
 
+		ScrollUtils.addOnGlobalLayoutListener(mScrollView, new Runnable() {
+			@Override
+			public void run() {
+				onScrollChanged(0, false, false);
+			}
+		});
 	}
 
 	private void addIngredient() {
@@ -209,14 +227,14 @@ public class AddRecipeActivity extends AppCompatActivity implements ObservableSc
 				int length = editable.length();
 				counter.setText(String.format(counterPattern, length, titleMaxLength));
 				if (length > titleMaxLength) {
-					counter.setTextColor(getResources().getColor(R.color.text_field_error));
+					counter.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.text_field_error));
 					errorText.setText(R.string.title_too_long);
 				} else {
 					if (editable.length() == 0)
 						setTitle(R.string.title_activity_add_recipe);
 					else
 						setTitle(editable.toString());
-					counter.setTextColor(getResources().getColor(R.color.helper_text_light));
+					counter.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.helper_text_light));
 					errorText.setText("");
 				}
 			}
@@ -399,10 +417,33 @@ public class AddRecipeActivity extends AppCompatActivity implements ObservableSc
 	@Override
 	public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
 		recipeImage.setTranslationY(scrollY / 2);
-		int baseColor = getResources().getColor(R.color.primary);
+		int baseColor = ContextCompat.getColor(getApplicationContext(), R.color.primary);
 		float alpha = Math.min(1, (float) scrollY / mParallaxImageHeight);
 		toolbar.setBackgroundColor(ScrollUtils.getColorWithAlpha(alpha, baseColor));
 
+		int maxFabTranslationY = mParallaxImageHeight - fab.getHeight() / 2;
+		float fabTranslationY = ScrollUtils.getFloat(
+				-scrollY + mParallaxImageHeight - fab.getHeight() / 2,
+				mActionBarSize - fab.getHeight() / 2,
+				maxFabTranslationY);
+		fab.setTranslationX(recipeImage.getWidth() - mFabMargin - fab.getWidth());
+		fab.setTranslationY(fabTranslationY);
+
+		if (fabTranslationY < mFlexibleSpaceShowFabOffset) {
+			hideFab();
+		} else {
+			showFab();
+		}
+	}
+
+	protected int getActionBarSize() {
+		TypedValue typedValue = new TypedValue();
+		int[] textSizeAttr = new int[]{R.attr.actionBarSize};
+		int indexOfAttrTextSize = 0;
+		TypedArray a = obtainStyledAttributes(typedValue.data, textSizeAttr);
+		int actionBarSize = a.getDimensionPixelSize(indexOfAttrTextSize, -1);
+		a.recycle();
+		return actionBarSize;
 	}
 
 	@Override
@@ -413,6 +454,23 @@ public class AddRecipeActivity extends AppCompatActivity implements ObservableSc
 	@Override
 	public void onUpOrCancelMotionEvent(ScrollState scrollState) {
 
+	}
+
+
+	private void showFab() {
+		if (!mFabIsShown) {
+			ViewPropertyAnimator.animate(fab).cancel();
+			ViewPropertyAnimator.animate(fab).scaleX(1).scaleY(1).setDuration(200).start();
+			mFabIsShown = true;
+		}
+	}
+
+	private void hideFab() {
+		if (mFabIsShown) {
+			ViewPropertyAnimator.animate(fab).cancel();
+			ViewPropertyAnimator.animate(fab).scaleX(0).scaleY(0).setDuration(200).start();
+			mFabIsShown = false;
+		}
 	}
 
 

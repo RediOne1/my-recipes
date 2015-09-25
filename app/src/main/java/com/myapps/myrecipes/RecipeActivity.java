@@ -23,7 +23,6 @@ import com.myapps.myrecipes.displayingbitmaps.ImageCache;
 import com.myapps.myrecipes.displayingbitmaps.ImageFetcher;
 import com.myapps.myrecipes.parseobjects.Rating;
 import com.myapps.myrecipes.parseobjects.Recipe;
-import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.parse.GetCallback;
 import com.parse.ParseException;
@@ -210,7 +209,7 @@ public class RecipeActivity extends AppCompatActivity implements ObservableScrol
 		});
 	}
 
-	protected int getActionBarSize() {
+	private int getActionBarSize() {
 		TypedValue typedValue = new TypedValue();
 		int[] textSizeAttr = new int[]{R.attr.actionBarSize};
 		int indexOfAttrTextSize = 0;

@@ -25,20 +25,12 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		ParseObject.registerSubclass(Category.class);
-		ParseObject.registerSubclass(Ingredient.class);
-		ParseObject.registerSubclass(Recipe.class);
-		ParseObject.registerSubclass(Rating.class);
-		Parse.enableLocalDatastore(this);
-		Parse.initialize(this, "sOtPvBFE5R8JWOcfm2gPFAUlNQLjFgadZ9KiQJMj", "jI625qcX1LCCoKaKBSMJa9dNWGzfgFhZBu3Zw5p3");
-		ParseFacebookUtils.initialize(this);
 		findViewById(R.id.start_button).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
 				startActivity(new Intent(MainActivity.this, NaviagtionDrawerActivity.class));
 			}
 		});
-		PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
 	}
 
 	@Override

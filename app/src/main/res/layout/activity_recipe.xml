@@ -93,12 +93,16 @@
 					android:id="@+id/recipe_activity_ingredients_layout"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:orientation="vertical"/>
+					android:orientation="vertical"
+					android:paddingLeft="@dimen/content_padding"
+					android:paddingRight="@dimen/content_padding"/>
 
 				<TextView
 					android:id="@+id/recipe_activity_description"
 					android:layout_width="match_parent"
-					android:layout_height="wrap_content"/>
+					android:layout_height="wrap_content"
+					android:paddingLeft="@dimen/content_padding"
+					android:paddingRight="@dimen/content_padding"/>
 
 			</LinearLayout>
 		</LinearLayout>

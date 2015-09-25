@@ -1,6 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              android:layout_width="match_parent"
-             android:layout_height="match_parent">
+             android:layout_height="match_parent"
+             xmlns:app="http://schemas.android.com/apk/res-auto">
 
 	<com.github.ksoichiro.android.observablescrollview.ObservableScrollView
 		android:id="@+id/scroll"
@@ -23,8 +24,8 @@
 					android:layout_width="match_parent"
 					android:layout_height="@dimen/parallax_image_height"
 					android:adjustViewBounds="true"
-					android:scaleType="center"
-					android:src="@drawable/ic_add_circle_black_24dp"
+					android:background="@color/primaryLight"
+					android:scaleType="centerCrop"
 					android:contentDescription="@string/recipe_image"/>
 
 				<ProgressBar
@@ -45,6 +46,8 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_below="@+id/anchor"
+				android:paddingLeft="@dimen/content_padding"
+				android:paddingRight="@dimen/content_padding"
 				android:elevation="4dp"
 				android:orientation="vertical">
 
@@ -168,6 +171,16 @@
 			</LinearLayout>
 		</RelativeLayout>
 	</com.github.ksoichiro.android.observablescrollview.ObservableScrollView>
+
+	<com.melnykov.fab.FloatingActionButton
+		android:id="@+id/fab_add_photo"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="start|top"
+		android:src="@drawable/ic_photo_camera_black_36dp"
+		android:scaleType="center"
+		app:fab_colorNormal="@color/accent_light"
+		app:fab_colorPressed="@color/accent"/>
 
 	<include
 		layout="@layout/toolbar"/>
