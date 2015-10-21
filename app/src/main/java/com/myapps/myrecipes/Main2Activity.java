@@ -1,10 +1,7 @@
 package com.myapps.myrecipes;
 
-import android.graphics.Color;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -13,10 +10,31 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
+
+import com.facebook.AccessToken;
+import com.facebook.AccessTokenTracker;
+import com.facebook.CallbackManager;
+import com.facebook.Profile;
+import com.facebook.login.widget.LoginButton;
+import com.facebook.login.widget.ProfilePictureView;
+import com.parse.LogInCallback;
+import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
+import com.parse.ParseUser;
+
+import java.util.Arrays;
 
 public class Main2Activity extends AppCompatActivity
 		implements NavigationView.OnNavigationItemSelectedListener {
+
+	private LoginButton loginButton;
+	private ProfilePictureView profilePictureView;
+	private TextView profileName;
+	private TextView profileMail;
+	private AccessTokenTracker accessTokenTracker;
+	private CallbackManager callbackManager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -31,15 +49,28 @@ public class Main2Activity extends AppCompatActivity
 		drawer.setDrawerListener(toggle);
 		toggle.syncState();
 
-		NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-		navigationView.setNavigationItemSelectedListener(this);
-		TextView textView = (TextView) findViewById(R.id.test_text);
-		textView.setOnClickListener(new View.OnClickListener() {
+		NavigationView navigation = (NavigationView) findViewById(R.id.nav_view);
+		navigation.setNavigationItemSelectedListener(this);
+		View navigationView = navigation.inflateHeaderView(R.layout.nav_header_main);
+		loginButton = (LoginButton) navigationView.findViewById(R.id.login_button);
+		profilePictureView = (ProfilePictureView) navigationView.findViewById(R.id.profile_picture);
+		profileName = (TextView) navigationView.findViewById(R.id.profile_name);
+		profileMail = (TextView) navigationView.findViewById(R.id.profile_mail);
+		setupLogin();
+	}
+
+	private void setupLogin() {
+		callbackManager = CallbackManager.Factory.create();
+		loginButton.setReadPermissions("user_friends");
+		accessTokenTracker = new AccessTokenTracker() {
 			@Override
-			public void onClick(View v) {
-				((TextView) v).setText("DUPA");
+			protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+				if (currentAccessToken == null) {
+					ParseUser.logOut();
+				}
 			}
-		});
+		};
+		accessTokenTracker.startTracking();
 	}
 
 	@Override
@@ -72,6 +103,13 @@ public class Main2Activity extends AppCompatActivity
 		}
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
+		callbackManager.onActivityResult(requestCode, resultCode, data);
 	}
 
 	@SuppressWarnings("StatementWithEmptyBody")
