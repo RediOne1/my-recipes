@@ -14,11 +14,9 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
+import android.widget.GridView;
 import android.widget.Toast;
 
-import com.github.ksoichiro.android.observablescrollview.ObservableGridView;
-import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
-import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.myapps.myrecipes.parseobjects.Recipe;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -34,7 +32,7 @@ import java.util.List;
 public class HomePageFragment extends Fragment {
 
 
-	private ObservableGridView observableGridView;
+	private GridView observableGridView;
 	private View toolbar;
 	private GridAdapter gridAdapter;
 	private List<Recipe> recipeList;
@@ -52,31 +50,7 @@ public class HomePageFragment extends Fragment {
 		super.onViewCreated(view, savedInstanceState);
 		toolbar = ((NaviagtionDrawerActivity) getActivity()).getToolbarView();
 
-		observableGridView = (ObservableGridView) view.findViewById(R.id.home_page_gridView);
-		observableGridView.setScrollViewCallbacks(new ObservableScrollViewCallbacks() {
-			@Override
-			public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
-
-			}
-
-			@Override
-			public void onDownMotionEvent() {
-
-			}
-
-			@Override
-			public void onUpOrCancelMotionEvent(ScrollState scrollState) {
-				if (scrollState == ScrollState.UP) {
-					if (toolbarIsShown()) {
-						hideToolbar();
-					}
-				} else if (scrollState == ScrollState.DOWN) {
-					if (toolbarIsHidden()) {
-						showToolbar();
-					}
-				}
-			}
-		});
+		observableGridView = (GridView) view.findViewById(R.id.home_page_gridView);
 		observableGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -120,53 +94,5 @@ public class HomePageFragment extends Fragment {
 				}
 			}
 		});
-	}
-
-	private boolean toolbarIsShown() {
-
-		// Toolbar is 0 in Y-axis, so we can say it's shown.
-		return toolbar.getTranslationY() == 0;
-	}
-
-	private boolean toolbarIsHidden() {
-		// Toolbar is outside of the screen and absolute Y matches the height of it.
-		// So we can say it's hidden.
-		return toolbar.getTranslationY() == -toolbar.getHeight();
-	}
-
-	private void showToolbar() {
-		moveToolbar(0);
-	}
-
-	private void hideToolbar() {
-		moveToolbar(-toolbar.getHeight());
-	}
-
-	private void moveToolbar(int toTranslationY) {
-		// Check the current translationY
-		if (toolbar.getTranslationY() == toTranslationY) {
-			return;
-		}
-		ValueAnimator animator = ValueAnimator.ofFloat(toolbar.getTranslationY(), toTranslationY).setDuration(200);
-		animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-			@Override
-			public void onAnimationUpdate(ValueAnimator animation) {
-				float translationY = (float) animation.getAnimatedValue();
-				toolbar.setTranslationY(translationY);
-				observableGridView.setTranslationY(translationY);
-				FrameLayout.LayoutParams lp = (FrameLayout.LayoutParams) observableGridView.getLayoutParams();
-				lp.height = (int) -translationY + getScreenHeight() - lp.topMargin;
-				observableGridView.requestLayout();
-			}
-		});
-		animator.start();
-	}
-
-	private int getScreenHeight() {
-		WindowManager wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
-		Display display = wm.getDefaultDisplay();
-		Point size = new Point();
-		display.getSize(size);
-		return size.y;
 	}
 }

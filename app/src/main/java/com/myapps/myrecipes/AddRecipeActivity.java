@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -36,15 +37,8 @@ import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
-import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
-import com.github.ksoichiro.android.observablescrollview.ScrollState;
-import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
-import com.melnykov.fab.FloatingActionButton;
 import com.myapps.myrecipes.parseobjects.Ingredient;
 import com.myapps.myrecipes.parseobjects.Recipe;
-import com.nineoldandroids.view.ViewPropertyAnimator;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
@@ -67,7 +61,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-public class AddRecipeActivity extends AppCompatActivity implements ObservableScrollViewCallbacks {
+public class AddRecipeActivity extends AppCompatActivity {
 
 	private static final int REQUEST_IMAGE_CAPTURE = 1;
 	private static final String TITLE = "title";
@@ -83,8 +77,6 @@ public class AddRecipeActivity extends AppCompatActivity implements ObservableSc
 	private EditText title;
 	private String mCurrentPhotoPath;
 	private ParseFile photoFile;
-	private int mParallaxImageHeight;
-	private ProgressBar progressBar;
 	private Recipe recipe;
 	private Spinner categorySpinner;
 	private Spinner difficultySpinner;
@@ -95,9 +87,6 @@ public class AddRecipeActivity extends AppCompatActivity implements ObservableSc
 	private Button addIngredient;
 	private FloatingActionButton fab;
 	private boolean mFabIsShown;
-	private int mActionBarSize;
-	private int mFabMargin;
-	private int mFlexibleSpaceShowFabOffset;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -106,9 +95,6 @@ public class AddRecipeActivity extends AppCompatActivity implements ObservableSc
 
 		toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
-		mActionBarSize = getActionBarSize();
-		mFabMargin = getResources().getDimensionPixelSize(R.dimen.margin_standard);
-		mFlexibleSpaceShowFabOffset = getResources().getDimensionPixelSize(R.dimen.flexible_space_show_fab_offset);
 		recipe = new Recipe();
 		recipe.setAuthor(ParseUser.getCurrentUser());
 		fab = (FloatingActionButton) findViewById(R.id.fab_add_photo);
@@ -119,7 +105,6 @@ public class AddRecipeActivity extends AppCompatActivity implements ObservableSc
 			}
 		});
 
-		progressBar = (ProgressBar) findViewById(R.id.progressBar);
 		ingredientsLayout = (LinearLayout) findViewById(R.id.ingredients_layout);
 		ingredientsList = new ArrayList<>();
 		ingredientsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, ingredientsList);
@@ -152,23 +137,9 @@ public class AddRecipeActivity extends AppCompatActivity implements ObservableSc
 		difficultyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		difficultySpinner.setAdapter(difficultyAdapter);
 
-		ObservableScrollView mScrollView = (ObservableScrollView) findViewById(R.id.scroll);
-		mScrollView.setScrollViewCallbacks(this);
-
 		description = (EditText) findViewById(R.id.add_recipe_description);
 		title = (EditText) findViewById(R.id.add_title_editText);
 		setupAddTitle();
-		mParallaxImageHeight = getResources().getDimensionPixelSize(
-				R.dimen.parallax_image_height);
-
-		toolbar.setBackgroundColor(ScrollUtils.getColorWithAlpha(0, ContextCompat.getColor(this, R.color.primary)));
-
-		ScrollUtils.addOnGlobalLayoutListener(mScrollView, new Runnable() {
-			@Override
-			public void run() {
-				onScrollChanged(0, false, false);
-			}
-		});
 	}
 
 	private void addIngredient() {
@@ -409,68 +380,8 @@ public class AddRecipeActivity extends AppCompatActivity implements ObservableSc
 		photoFile.saveInBackground(saveCallback, new ProgressCallback() {
 			@Override
 			public void done(Integer progress) {
-				progressBar.setProgress(progress);
 			}
 		});
-	}
-
-	@Override
-	public void onScrollChanged(int scrollY, boolean firstScroll, boolean dragging) {
-		recipeImage.setTranslationY(scrollY / 2);
-		int baseColor = ContextCompat.getColor(getApplicationContext(), R.color.primary);
-		float alpha = Math.min(1, (float) scrollY / mParallaxImageHeight);
-		toolbar.setBackgroundColor(ScrollUtils.getColorWithAlpha(alpha, baseColor));
-
-		int maxFabTranslationY = mParallaxImageHeight - fab.getHeight() / 2;
-		float fabTranslationY = ScrollUtils.getFloat(
-				-scrollY + mParallaxImageHeight - fab.getHeight() / 2,
-				mActionBarSize - fab.getHeight() / 2,
-				maxFabTranslationY);
-		fab.setTranslationX(recipeImage.getWidth() - mFabMargin - fab.getWidth());
-		fab.setTranslationY(fabTranslationY);
-
-		if (fabTranslationY < mFlexibleSpaceShowFabOffset) {
-			hideFab();
-		} else {
-			showFab();
-		}
-	}
-
-	protected int getActionBarSize() {
-		TypedValue typedValue = new TypedValue();
-		int[] textSizeAttr = new int[]{R.attr.actionBarSize};
-		int indexOfAttrTextSize = 0;
-		TypedArray a = obtainStyledAttributes(typedValue.data, textSizeAttr);
-		int actionBarSize = a.getDimensionPixelSize(indexOfAttrTextSize, -1);
-		a.recycle();
-		return actionBarSize;
-	}
-
-	@Override
-	public void onDownMotionEvent() {
-
-	}
-
-	@Override
-	public void onUpOrCancelMotionEvent(ScrollState scrollState) {
-
-	}
-
-
-	private void showFab() {
-		if (!mFabIsShown) {
-			ViewPropertyAnimator.animate(fab).cancel();
-			ViewPropertyAnimator.animate(fab).scaleX(1).scaleY(1).setDuration(200).start();
-			mFabIsShown = true;
-		}
-	}
-
-	private void hideFab() {
-		if (mFabIsShown) {
-			ViewPropertyAnimator.animate(fab).cancel();
-			ViewPropertyAnimator.animate(fab).scaleX(0).scaleY(0).setDuration(200).start();
-			mFabIsShown = false;
-		}
 	}
 
 

@@ -1,55 +1,64 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             xmlns:app="http://schemas.android.com/apk/res-auto">
+<android.support.design.widget.CoordinatorLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:fitsSystemWindows="true">
 
-	<com.github.ksoichiro.android.observablescrollview.ObservableScrollView
+	<android.support.design.widget.AppBarLayout
+		android:id="@+id/app_bar_layout"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:fitsSystemWindows="true"
+		android:theme="@style/ThemeOverlay.AppCompat">
+
+		<android.support.design.widget.CollapsingToolbarLayout
+			android:id="@+id/collapsing_toolbar"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:fitsSystemWindows="true"
+			app:contentScrim="?attr/colorPrimary"
+			app:expandedTitleMarginEnd="64dp"
+			app:expandedTitleMarginStart="48dp"
+			app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+			<ImageView
+				android:id="@+id/add_recipe_image"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:fitsSystemWindows="true"
+				android:scaleType="centerCrop"
+				app:layout_collapseMode="parallax"/>
+
+			<android.support.v7.widget.Toolbar
+				android:id="@+id/toolbar"
+				android:layout_width="match_parent"
+				android:layout_height="?attr/actionBarSize"
+				app:layout_collapseMode="pin"
+				app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+		</android.support.design.widget.CollapsingToolbarLayout>
+
+	</android.support.design.widget.AppBarLayout>
+
+	<android.support.v4.widget.NestedScrollView
 		android:id="@+id/scroll"
-		xmlns:android="http://schemas.android.com/apk/res/android"
-		xmlns:tools="http://schemas.android.com/tools"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		tools:context="com.myapps.myrecipes.AddRecipeActivity">
+		android:clipToPadding="false"
+		app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 		<RelativeLayout
 			android:layout_width="match_parent"
 			android:layout_height="match_parent">
 
-			<FrameLayout
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content">
-
-				<ImageView
-					android:id="@+id/add_recipe_image"
-					android:layout_width="match_parent"
-					android:layout_height="@dimen/parallax_image_height"
-					android:adjustViewBounds="true"
-					android:background="@color/primaryLight"
-					android:scaleType="centerCrop"
-					android:contentDescription="@string/recipe_image"/>
-
-				<ProgressBar
-					android:id="@+id/progressBar"
-					style="?android:attr/progressBarStyleHorizontal"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:layout_gravity="center_horizontal|bottom"/>
-			</FrameLayout>
-
-			<View
-				android:id="@+id/anchor"
-				android:layout_width="match_parent"
-				android:layout_height="@dimen/parallax_image_height"
-				android:minHeight="@dimen/parallax_image_height"/>
-
 			<LinearLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:layout_below="@+id/anchor"
-				android:paddingLeft="@dimen/content_padding"
-				android:paddingRight="@dimen/content_padding"
 				android:elevation="4dp"
-				android:orientation="vertical">
+				android:orientation="vertical"
+				android:paddingLeft="@dimen/content_padding"
+				android:paddingRight="@dimen/content_padding">
 
 				<!--Więcej info dla tego wzorca:
 				https://www.google.com/design/spec/patterns/errors.html#errors-user-input-errors-->
@@ -62,8 +71,8 @@
 					<TextView
 						android:layout_width="wrap_content"
 						android:layout_height="wrap_content"
-						android:paddingRight="4dp"
 						android:paddingLeft="4dp"
+						android:paddingRight="4dp"
 						android:paddingTop="16dp"
 						android:text="@string/add_title"
 						android:textSize="12sp"/>
@@ -104,8 +113,8 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:labelFor="@+id/ingredients_layout"
-					android:paddingRight="4dp"
 					android:paddingLeft="4dp"
+					android:paddingRight="4dp"
 					android:text="@string/ingredients"
 					android:textSize="12sp"/>
 
@@ -125,8 +134,8 @@
 				<TextView
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:paddingRight="4dp"
 					android:paddingLeft="4dp"
+					android:paddingRight="4dp"
 					android:paddingTop="16dp"
 					android:text="@string/select_category"
 					android:textSize="12sp"/>
@@ -139,8 +148,8 @@
 				<TextView
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:paddingRight="4dp"
 					android:paddingLeft="4dp"
+					android:paddingRight="4dp"
 					android:paddingTop="16dp"
 					android:text="@string/select_difficulty"
 					android:textSize="12sp"/>
@@ -153,35 +162,27 @@
 				<TextView
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:paddingRight="4dp"
-					android:paddingLeft="4dp"
-					android:paddingTop="16dp"
 					android:labelFor="@+id/add_recipe_description"
+					android:paddingLeft="4dp"
+					android:paddingRight="4dp"
+					android:paddingTop="16dp"
 					android:text="@string/description"
 					android:textSize="12sp"/>
 
 				<EditText
+					android:id="@+id/add_recipe_description"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:inputType="textMultiLine"
 					android:ems="10"
-					android:id="@+id/add_recipe_description"/>
-
+					android:inputType="textMultiLine"/>
 
 			</LinearLayout>
 		</RelativeLayout>
-	</com.github.ksoichiro.android.observablescrollview.ObservableScrollView>
+	</android.support.v4.widget.NestedScrollView>
 
-	<com.melnykov.fab.FloatingActionButton
+	<android.support.design.widget.FloatingActionButton
 		android:id="@+id/fab_add_photo"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_gravity="start|top"
-		android:src="@drawable/ic_photo_camera_black_36dp"
-		android:scaleType="center"
-		app:fab_colorNormal="@color/accent_light"
-		app:fab_colorPressed="@color/accent"/>
-
-	<include
-		layout="@layout/toolbar"/>
-</FrameLayout>
+		app:layout_anchor="@id/app_bar_layout"
+		app:layout_anchorGravity="bottom|right|end"
+		style="@style/FabStyle"/>
+</android.support.design.widget.CoordinatorLayout>

@@ -8,6 +8,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -131,7 +132,7 @@ public class NaviagtionDrawerActivity extends AppCompatActivity
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-
+		Log.d("DEBUG_TAG", "" + id);
 		//noinspection SimplifiableIfStatement
 		if (id == R.id.action_settings) {
 			return true;

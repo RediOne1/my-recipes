@@ -1,143 +1,131 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent">
+<android.support.design.widget.CoordinatorLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:fitsSystemWindows="true">
 
-	<ImageView
-		android:id="@+id/image"
+	<android.support.design.widget.AppBarLayout
+		android:id="@+id/app_bar_layout"
 		android:layout_width="match_parent"
-		android:layout_height="@dimen/flexible_space_image_height"
-		android:contentDescription="@string/recipe_image"
-		android:scaleType="centerCrop"/>
+		android:layout_height="wrap_content"
+		android:fitsSystemWindows="true"
+		android:theme="@style/ThemeOverlay.AppCompat">
 
-	<View
-		android:id="@+id/overlay"
-		android:layout_width="match_parent"
-		android:layout_height="@dimen/flexible_space_image_height"
-		android:background="@color/primary"/>
+		<android.support.design.widget.CollapsingToolbarLayout
+			android:id="@+id/collapsing_toolbar"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:fitsSystemWindows="true"
+			app:contentScrim="?attr/colorPrimary"
+			app:expandedTitleMarginEnd="64dp"
+			app:expandedTitleMarginStart="48dp"
+			app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-	<com.github.ksoichiro.android.observablescrollview.ObservableScrollView
+			<ImageView
+				android:id="@+id/image"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:fitsSystemWindows="true"
+				android:scaleType="centerCrop"
+				app:layout_collapseMode="parallax"/>
+
+			<android.support.v7.widget.Toolbar
+				android:id="@+id/toolbar"
+				app:layout_scrollFlags="scroll|enterAlways"
+				app:layout_collapseMode="pin"
+				android:layout_width="match_parent"
+				android:layout_height="?attr/actionBarSize"/>
+
+		</android.support.design.widget.CollapsingToolbarLayout>
+
+	</android.support.design.widget.AppBarLayout>
+
+	<android.support.v4.widget.NestedScrollView
 		android:id="@+id/scroll"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:overScrollMode="never"
-		android:scrollbars="none">
+		android:clipToPadding="false"
+		app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 		<LinearLayout
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:orientation="vertical">
 
-			<View
-				android:layout_width="match_parent"
-				android:layout_height="@dimen/flexible_space_image_height"
-				android:background="@android:color/transparent"/>
-
-			<LinearLayout
+			<RelativeLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
-				android:background="@android:color/white"
-				android:orientation="vertical">
+				android:background="@color/primaryLight"
+				android:padding="10dp">
 
-				<RelativeLayout
-					android:layout_width="match_parent"
+				<RatingBar
+					android:id="@+id/recipeRatingBar"
+					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:background="@color/primaryLight"
-					android:padding="10dp">
-
-					<RatingBar
-						android:id="@+id/recipeRatingBar"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:layout_centerHorizontal="true"
-						android:stepSize="0.5"/>
-
-					<TextView
-						android:id="@+id/category_label"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:layout_below="@+id/recipeRatingBar"
-						android:text="@string/category"/>
-
-					<TextView
-						android:id="@+id/category_name"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:layout_below="@+id/recipeRatingBar"
-						android:layout_marginLeft="5dp"
-						android:layout_marginStart="5dp"
-						android:layout_toEndOf="@+id/category_label"
-						android:layout_toRightOf="@+id/category_label"/>
-
-					<TextView
-						android:id="@+id/difficulty_label"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:layout_below="@+id/category_label"
-						android:layout_marginTop="5dp"
-						android:text="@string/difficulty"/>
-
-					<TextView
-						android:id="@+id/difficulty_name"
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:layout_below="@+id/category_label"
-						android:layout_marginLeft="5dp"
-						android:layout_marginStart="5dp"
-						android:layout_marginTop="5dp"
-						android:layout_toEndOf="@+id/difficulty_label"
-						android:layout_toRightOf="@+id/difficulty_label"/>
-				</RelativeLayout>
-
-				<LinearLayout
-					android:id="@+id/recipe_activity_ingredients_layout"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:orientation="vertical"
-					android:paddingLeft="@dimen/content_padding"
-					android:paddingRight="@dimen/content_padding"/>
+					android:layout_centerHorizontal="true"
+					android:stepSize="0.5"/>
 
 				<TextView
-					android:id="@+id/recipe_activity_description"
-					android:layout_width="match_parent"
+					android:id="@+id/category_label"
+					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
-					android:paddingLeft="@dimen/content_padding"
-					android:paddingRight="@dimen/content_padding"/>
+					android:layout_below="@+id/recipeRatingBar"
+					android:text="@string/category"/>
 
-			</LinearLayout>
+				<TextView
+					android:id="@+id/category_name"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_below="@+id/recipeRatingBar"
+					android:layout_marginLeft="5dp"
+					android:layout_marginStart="5dp"
+					android:layout_toEndOf="@+id/category_label"
+					android:layout_toRightOf="@+id/category_label"/>
+
+				<TextView
+					android:id="@+id/difficulty_label"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_below="@+id/category_label"
+					android:layout_marginTop="5dp"
+					android:text="@string/difficulty"/>
+
+				<TextView
+					android:id="@+id/difficulty_name"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_below="@+id/category_label"
+					android:layout_marginLeft="5dp"
+					android:layout_marginStart="5dp"
+					android:layout_marginTop="5dp"
+					android:layout_toEndOf="@+id/difficulty_label"
+					android:layout_toRightOf="@+id/difficulty_label"/>
+			</RelativeLayout>
+
+			<LinearLayout
+				android:id="@+id/recipe_activity_ingredients_layout"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical"
+				android:paddingLeft="@dimen/content_padding"
+				android:paddingRight="@dimen/content_padding"/>
+
+			<TextView
+				android:id="@+id/recipe_activity_description"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingLeft="@dimen/content_padding"
+				android:paddingRight="@dimen/content_padding"/>
+
 		</LinearLayout>
-	</com.github.ksoichiro.android.observablescrollview.ObservableScrollView>
 
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:orientation="vertical">
+	</android.support.v4.widget.NestedScrollView>
 
-		<TextView
-			android:id="@+id/title"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:ellipsize="end"
-			android:gravity="center_vertical"
-			android:maxLines="1"
-			android:minHeight="?attr/actionBarSize"
-			android:paddingLeft="@dimen/margin_standard"
-			android:paddingRight="@dimen/margin_standard"
-			android:textColor="@android:color/white"
-			android:textSize="26sp"/>
-
-		<View
-			android:layout_width="match_parent"
-			android:layout_height="@dimen/flexible_space_image_height"
-			android:background="@android:color/transparent"/>
-	</LinearLayout>
-
-	<com.melnykov.fab.FloatingActionButton
+	<android.support.design.widget.FloatingActionButton
 		android:id="@+id/fab"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_gravity="start|top"
-		android:scaleType="center"
-		app:fab_colorNormal="@color/accent_light"
-		app:fab_colorPressed="@color/accent"/>
-</FrameLayout>
+		style="@style/FabStyle"
+		app:layout_anchor="@id/app_bar_layout"
+		app:layout_anchorGravity="bottom|right|end"/>
+
+</android.support.design.widget.CoordinatorLayout>
