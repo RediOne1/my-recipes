@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.myapps.myrecipes" >
+<manifest
+    package="com.myapps.myrecipes"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -27,17 +28,13 @@
             android:value="@string/facebook_app_id" />
 
         <activity
-            android:name=".MainActivity"
+            android:name=".SplashActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity
-            android:name=".NaviagtionDrawerActivity"
-            android:label="@string/app_name" >
         </activity>
 
         <!-- Dodano aby móc korzystać z facebook login / share -->
@@ -58,7 +55,7 @@
             android:label="@string/title_activity_settings" >
         </activity>
         <activity
-            android:name=".Main2Activity"
+            android:name=".MainActivity"
             android:label="@string/title_activity_main2"
             android:theme="@style/AppTheme" >
         </activity>
