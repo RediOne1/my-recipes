@@ -1,19 +1,13 @@
 package com.myapps.myrecipes;
 
 
-import android.animation.ValueAnimator;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.Toast;
 
@@ -48,7 +42,7 @@ public class HomePageFragment extends Fragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		toolbar = ((NaviagtionDrawerActivity) getActivity()).getToolbarView();
+		/*toolbar = ((NaviagtionDrawerActivity) getActivity()).getToolbarView();*/
 
 		observableGridView = (GridView) view.findViewById(R.id.home_page_gridView);
 		observableGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

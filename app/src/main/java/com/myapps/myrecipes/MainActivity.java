@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity
 
 		NavigationView navigation = (NavigationView) findViewById(R.id.nav_view);
 		navigation.setNavigationItemSelectedListener(this);
+		navigation.getMenu().getItem(0).setChecked(true);
 		View navigationView = navigation.inflateHeaderView(R.layout.nav_header_main);
 		loginButton = (LoginButton) navigationView.findViewById(R.id.login_button);
 		profilePictureView = (ProfilePictureView) navigationView.findViewById(R.id.profile_picture);

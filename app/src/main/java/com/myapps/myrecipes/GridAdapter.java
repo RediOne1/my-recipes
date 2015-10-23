@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.myapps.myrecipes.displayingbitmaps.ImageFetcher;
 import com.myapps.myrecipes.parseobjects.Recipe;
-import com.parse.ParseFile;
 
 import java.util.List;
 
@@ -28,7 +27,8 @@ public class GridAdapter extends BaseAdapter {
 	public GridAdapter(Context context, List<Recipe> recipes) {
 		inflater = LayoutInflater.from(context);
 		this.recipes = recipes;
-		imageFetcher = ((NaviagtionDrawerActivity) context).getImageFetcher();
+		//Todo create method getImageFetcher in MainActivity
+		/*imageFetcher = ((MainActivity) context).getImageFetcher();*/
 	}
 
 	@Override
