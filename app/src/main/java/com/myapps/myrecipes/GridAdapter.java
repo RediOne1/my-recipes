@@ -28,7 +28,7 @@ public class GridAdapter extends BaseAdapter {
 		inflater = LayoutInflater.from(context);
 		this.recipes = recipes;
 		//Todo create method getImageFetcher in MainActivity
-		/*imageFetcher = ((MainActivity) context).getImageFetcher();*/
+		imageFetcher = ((MainActivity) context).getImageFetcher();
 	}
 
 	@Override

@@ -1,0 +1,18 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="com.myapps.myrecipes.LastAddedFragment">
+
+	<GridView
+		android:id="@+id/my_recipes_gridView"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:animateLayoutChanges="true"
+		android:horizontalSpacing="10dp"
+		android:numColumns="@integer/grid_column_count"
+		android:padding="10dp"
+		android:stretchMode="columnWidth"
+		android:verticalSpacing="10dp"/>
+
+</FrameLayout>

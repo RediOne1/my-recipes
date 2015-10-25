@@ -3,6 +3,7 @@ package com.myapps.myrecipes;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +16,7 @@ import com.myapps.myrecipes.parseobjects.Recipe;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,28 +25,36 @@ import java.util.List;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class HomePageFragment extends Fragment {
+public class MyRecipesFragment extends Fragment {
 
 
-	private GridView observableGridView;
-	private View toolbar;
-	private GridAdapter gridAdapter;
 	private List<Recipe> recipeList;
+	private GridAdapter gridAdapter;
 	private ParseQuery<Recipe> query;
+
+	public MyRecipesFragment() {
+		// Required empty public constructor
+	}
+
+	@NonNull
+	public static MyRecipesFragment newInstance() {
+		return new MyRecipesFragment();
+	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		return inflater.inflate(R.layout.fragment_home_page, container, false);
+		return inflater.inflate(R.layout.fragment_my_recipes, container, false);
 	}
 
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		/*toolbar = ((NaviagtionDrawerActivity) getActivity()).getToolbarView();*/
-
-		observableGridView = (GridView) view.findViewById(R.id.home_page_gridView);
+		ParseUser parseUser = ParseUser.getCurrentUser();
+		if (parseUser == null)
+			return;
+		GridView observableGridView = (GridView) view.findViewById(R.id.my_recipes_gridView);
 		observableGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -63,6 +73,7 @@ public class HomePageFragment extends Fragment {
 		gridAdapter = new GridAdapter(getActivity(), recipeList);
 		observableGridView.setAdapter(gridAdapter);
 		query = Recipe.getQuery();
+		query.whereEqualTo("author", parseUser);
 		query.findInBackground(new FindCallback<Recipe>() {
 			@Override
 			public void done(List<Recipe> list, ParseException e) {

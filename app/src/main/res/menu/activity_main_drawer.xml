@@ -10,21 +10,22 @@
 
 		<item android:title="@string/my_recipe_book">
 			<menu>
-				<item
-					android:id="@+id/favourite_recipes_menuitem"
-					android:icon="@drawable/ic_favorite_black_24dp"
-					android:title="@string/favourite_recipes"/>
-				<item
-					android:id="@+id/my_recipes_menuitem"
-					android:icon="@drawable/ic_chrome_reader_mode_black_24dp"
-					android:title="@string/my_recipes"/>
+				<group android:checkableBehavior="single">
+					<item
+						android:id="@+id/favourite_recipes_menuitem"
+						android:icon="@drawable/ic_favorite_black_24dp"
+						android:title="@string/favourite_recipes"/>
+					<item
+						android:id="@+id/my_recipes_menuitem"
+						android:icon="@drawable/ic_chrome_reader_mode_black_24dp"
+						android:title="@string/my_recipes"/>
 
-				<item
-					android:id="@+id/add_recipe_menuitem"
-					android:checkable="false"
-					android:icon="@drawable/ic_add_circle_black_24dp"
-					android:title="@string/add_recipe"/>
-
+					<item
+						android:id="@+id/add_recipe_menuitem"
+						android:checkable="false"
+						android:icon="@drawable/ic_add_circle_black_24dp"
+						android:title="@string/add_recipe"/>
+				</group>
 			</menu>
 		</item>
 		<item android:title="@string/all_recipes">
@@ -47,9 +48,11 @@
 			</menu>
 		</item>
 	</group>
-	<item
-		android:id="@+id/settings_menuitem"
-		android:icon="@drawable/ic_settings_black_24dp"
-		android:title="@string/settings"/>
+	<group android:checkableBehavior="single">
+		<item
+			android:id="@+id/settings_menuitem"
+			android:icon="@drawable/ic_settings_black_24dp"
+			android:title="@string/settings"/>
+	</group>
 
 </menu>

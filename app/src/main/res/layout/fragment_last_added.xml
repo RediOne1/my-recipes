@@ -1,23 +1,13 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:app="http://schemas.android.com/apk/res-auto"
              xmlns:tools="http://schemas.android.com/tools"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             android:fitsSystemWindows="true"
-             tools:context="com.myapps.myrecipes.HomePageFragment">
-
-	<android.support.v7.widget.Toolbar
-		android:id="@+id/toolbar"
-		android:layout_width="match_parent"
-		android:layout_height="?attr/actionBarSize"
-		app:layout_collapseMode="pin"
-		app:layout_scrollFlags="scroll|enterAlways"/>
+             tools:context="com.myapps.myrecipes.LastAddedFragment">
 
 	<GridView
-		android:id="@+id/home_page_gridView"
+		android:id="@+id/last_added_gridView"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:layout_marginTop="?attr/actionBarSize"
 		android:animateLayoutChanges="true"
 		android:horizontalSpacing="10dp"
 		android:numColumns="@integer/grid_column_count"
