@@ -222,11 +222,12 @@ public class MainActivity extends AppCompatActivity
 		} else if (id == R.id.my_recipes_menuitem) {
 			showFragment(MyRecipesFragment.newInstance());
 		} else if (id == R.id.add_recipe_menuitem) {
-
+			Intent i = new Intent(this, AddRecipeActivity.class);
+			startActivity(i);
 		} else if (id == R.id.top_rated_menuitem) {
-
+			showFragment(TopRatedRecipesFragment.newInstance());
 		} else if (id == R.id.last_added_menuitem) {
-
+			showFragment(LastAddedFragment.newInstance());
 		} else if (id == R.id.categories_menuitem) {
 
 		} else if (id == R.id.settings_menuitem) {

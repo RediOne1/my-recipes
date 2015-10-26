@@ -18,15 +18,26 @@ public class Rating extends ParseObject {
 		return ParseQuery.getQuery(Rating.class);
 	}
 
-	public void setRating(float rating) {
-		put("rate", rating);
-	}
-
 	public void setUser(ParseUser user) {
 		put("user", user);
 	}
 
 	public void setRecipe(Recipe recipe) {
 		put("recipe", recipe);
+	}
+
+	/**
+	 * @param recipeId Recipe id
+	 */
+	public void setRecipe(String recipeId) {
+		put("recipe", ParseObject.createWithoutData("Recipe", recipeId));
+	}
+
+	public float getRating() {
+		return getNumber("rate").floatValue();
+	}
+
+	public void setRating(float rating) {
+		put("rate", rating);
 	}
 }

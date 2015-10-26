@@ -6,13 +6,13 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.myapps.myrecipes.displayingbitmaps.ImageCache;
 import com.myapps.myrecipes.displayingbitmaps.ImageFetcher;
@@ -20,9 +20,9 @@ import com.myapps.myrecipes.parseobjects.Rating;
 import com.myapps.myrecipes.parseobjects.Recipe;
 import com.parse.GetCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,10 +38,8 @@ public class RecipeActivity extends AppCompatActivity {
 	public static final String PHOTO_URL = "photo_url";
 	public static final String DESCRIPTION = "description";
 
-	private static final float MAX_TEXT_SCALE_DELTA = 0.3f;
 	private static final String IMAGE_CACHE_DIR = "images";
 	private ImageView mImageView;
-	private View mFab;
 	private LinearLayout ingredientsLayout;
 	private TextView category;
 	private TextView difficulty;
@@ -63,9 +61,6 @@ public class RecipeActivity extends AppCompatActivity {
 		category = (TextView) findViewById(R.id.category_name);
 		difficulty = (TextView) findViewById(R.id.difficulty_name);
 		description = (TextView) findViewById(R.id.recipe_activity_description);
-		mFab = findViewById(R.id.fab);
-		mFab.setScaleX(0);
-		mFab.setScaleY(0);
 
 		setUpImageLoader();
 		Bundle bundle = getIntent().getExtras();
@@ -95,27 +90,49 @@ public class RecipeActivity extends AppCompatActivity {
 							imageFetcher.loadImage(photoUrl, mImageView);
 					}
 				});
-
-				RatingBar ratingBar = (RatingBar) findViewById(R.id.recipeRatingBar);
-				ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+			}
+		}
+		if (recipeId == null)
+			return;
+		final RatingBar ratingBar = (RatingBar) findViewById(R.id.recipeRatingBar);
+		ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+			@Override
+			public void onRatingChanged(RatingBar ratingBar, final float rating, boolean fromUser) {
+				ParseQuery<Rating> query = Rating.getQuery();
+				query.whereEqualTo("recipe", ParseObject.createWithoutData("Recipe", recipeId));
+				query.whereEqualTo("user", ParseUser.getCurrentUser());
+				query.getFirstInBackground(new GetCallback<Rating>() {
 					@Override
-					public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-						Rating ratingObject = new Rating();
-						ratingObject.setRating(rating);
-						ratingObject.setUser(ParseUser.getCurrentUser());
-						ratingObject.put("recipe", recipeId);
-						ratingObject.saveEventually(new SaveCallback() {
-							@Override
-							public void done(ParseException e) {
-								if (e != null) {
-									Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-								}
-							}
-						});
+					public void done(Rating ratingObject, ParseException e) {
+						if (e == null) {
+							ratingObject.setRating(rating);
+							ratingObject.setRecipe(recipeId);
+							ratingObject.saveEventually();
+						} else if (e.getCode() == ParseException.OBJECT_NOT_FOUND) {
+							ratingObject = new Rating();
+							ratingObject.setRating(rating);
+							ratingObject.setRecipe(recipeId);
+							ratingObject.setUser(ParseUser.getCurrentUser());
+							ratingObject.saveEventually();
+						} else
+							Log.e("DEBUG_TAG", "Rating", e);
 					}
 				});
 			}
-		}
+		});
+
+		ParseQuery<Rating> query = Rating.getQuery();
+		query.whereEqualTo("recipe", ParseObject.createWithoutData("Recipe", recipeId));
+		query.whereEqualTo("user", ParseUser.getCurrentUser());
+		query.getFirstInBackground(new GetCallback<Rating>() {
+			@Override
+			public void done(Rating rating, ParseException e) {
+				if (e == null) {
+					ratingBar.setRating(rating.getRating());
+				}
+			}
+		});
+
 	}
 
 	private void setUpImageLoader() {

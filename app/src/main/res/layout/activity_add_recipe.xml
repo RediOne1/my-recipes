@@ -22,7 +22,7 @@
 			app:expandedTitleMarginStart="48dp"
 			app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-			<ImageView
+			<com.myapps.myrecipes.SquareImageView
 				android:id="@+id/add_recipe_image"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
@@ -182,7 +182,8 @@
 
 	<android.support.design.widget.FloatingActionButton
 		android:id="@+id/fab_add_photo"
+		style="@style/FabStyle"
+		android:src="@drawable/ic_photo_camera_black_36dp"
 		app:layout_anchor="@id/app_bar_layout"
-		app:layout_anchorGravity="bottom|right|end"
-		style="@style/FabStyle"/>
+		app:layout_anchorGravity="bottom|right|end"/>
 </android.support.design.widget.CoordinatorLayout>
