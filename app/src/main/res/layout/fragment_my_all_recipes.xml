@@ -5,9 +5,10 @@
              tools:context="com.myapps.myrecipes.LastAddedFragment">
 
 	<GridView
-		android:id="@+id/last_added_gridView"
+		android:id="@+id/my_all_recipes_gridView"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
+		android:layout_marginTop="?attr/actionBarSize"
 		android:animateLayoutChanges="true"
 		android:horizontalSpacing="10dp"
 		android:numColumns="@integer/grid_column_count"
