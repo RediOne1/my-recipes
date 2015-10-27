@@ -57,6 +57,7 @@ public class MyAllRecipesFragment extends Fragment {
 				intent.putExtra(RecipeActivity.DIFFICULTY, recipe.getDifficulty());
 				intent.putExtra(RecipeActivity.INGREDIENTS, recipe.getIngredientJSON());
 				intent.putExtra(RecipeActivity.PHOTO_URL, recipe.getPhotoUrl());
+				intent.putExtra(RecipeActivity.DESCRIPTION, recipe.getDescription());
 				startActivity(intent);
 			}
 		});

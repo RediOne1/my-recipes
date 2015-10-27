@@ -10,7 +10,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:fitsSystemWindows="true"
-		android:theme="@style/ThemeOverlay.AppCompat">
+		android:theme="@style/AppTheme.AppBarOverlay">
 
 		<android.support.design.widget.CollapsingToolbarLayout
 			android:id="@+id/collapsing_toolbar"
@@ -115,6 +115,8 @@
 				android:id="@+id/recipe_activity_description"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
+				android:layout_marginTop="10dp"
+				android:textSize="16sp"
 				android:paddingLeft="@dimen/content_padding"
 				android:paddingRight="@dimen/content_padding"/>
 

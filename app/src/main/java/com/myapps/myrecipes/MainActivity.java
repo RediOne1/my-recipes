@@ -26,7 +26,6 @@ import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
 import com.myapps.myrecipes.displayingbitmaps.ImageCache;
 import com.myapps.myrecipes.displayingbitmaps.ImageFetcher;
-import com.myapps.myrecipes.displayingbitmaps.ImageResizer;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
@@ -44,7 +43,6 @@ public class MainActivity extends AppCompatActivity
 	private TextView profileName;
 	private TextView profileMail;
 	private CallbackManager callbackManager;
-	private ImageResizer imageResizer;
 	private ImageFetcher imageFetcher;
 
 	@Override
@@ -64,6 +62,7 @@ public class MainActivity extends AppCompatActivity
 		NavigationView navigation = (NavigationView) findViewById(R.id.nav_view);
 		navigation.setNavigationItemSelectedListener(this);
 		navigation.setCheckedItem(R.id.home_page_menuitem);
+		onNavigationItemSelected(navigation.getMenu().findItem(R.id.home_page_menuitem));
 		View navigationView = navigation.inflateHeaderView(R.layout.nav_header_main);
 		loginButton = (LoginButton) navigationView.findViewById(R.id.login_button);
 		profilePictureView = (ProfilePictureView) navigationView.findViewById(R.id.profile_picture);
@@ -92,19 +91,12 @@ public class MainActivity extends AppCompatActivity
 				new ImageCache.ImageCacheParams(this, IMAGE_CACHE_DIR);
 		cacheParams.setMemCacheSizePercent(0.25f); // Set memory cache to 25% of app memory
 
-		imageResizer = new ImageResizer(this, longest);
-		imageResizer.addImageCache(getSupportFragmentManager(), cacheParams);
-
 		imageFetcher = new ImageFetcher(this, longest);
 		imageFetcher.addImageCache(getSupportFragmentManager(), cacheParams);
 	}
 
 	public ImageFetcher getImageFetcher() {
 		return imageFetcher;
-	}
-
-	public ImageResizer getImageResizer() {
-		return imageResizer;
 	}
 
 	private void setupLogin() {
@@ -217,18 +209,24 @@ public class MainActivity extends AppCompatActivity
 
 		if (id == R.id.home_page_menuitem) {
 			showFragment(LastAddedFragment.newInstance());
+			setTitle(getString(R.string.home_page));
 		} else if (id == R.id.favourite_recipes_menuitem) {
 
+			setTitle(getString(R.string.my_recipes));
 		} else if (id == R.id.my_recipes_menuitem) {
 			showFragment(MyRecipesFragment.newInstance());
+			setTitle(getString(R.string.my_recipes));
 		} else if (id == R.id.add_recipe_menuitem) {
 			Intent i = new Intent(this, AddRecipeActivity.class);
 			startActivity(i);
 		} else if (id == R.id.top_rated_menuitem) {
 			showFragment(TopRatedRecipesFragment.newInstance());
+			setTitle(getString(R.string.top_rated));
 		} else if (id == R.id.last_added_menuitem) {
 			showFragment(LastAddedFragment.newInstance());
+			setTitle(getString(R.string.last_added));
 		} else if (id == R.id.categories_menuitem) {
+			setTitle(getString(R.string.categories));
 
 		} else if (id == R.id.settings_menuitem) {
 

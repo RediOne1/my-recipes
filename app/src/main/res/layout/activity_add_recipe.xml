@@ -10,7 +10,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:fitsSystemWindows="true"
-		android:theme="@style/ThemeOverlay.AppCompat">
+		android:theme="@style/AppTheme.AppBarOverlay">
 
 		<android.support.design.widget.CollapsingToolbarLayout
 			android:id="@+id/collapsing_toolbar"
@@ -34,8 +34,7 @@
 				android:id="@+id/toolbar"
 				android:layout_width="match_parent"
 				android:layout_height="?attr/actionBarSize"
-				app:layout_collapseMode="pin"
-				app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+				app:layout_collapseMode="pin"/>
 
 		</android.support.design.widget.CollapsingToolbarLayout>
 
