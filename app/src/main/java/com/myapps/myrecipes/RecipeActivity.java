@@ -3,6 +3,7 @@ package com.myapps.myrecipes;
 import android.animation.Animator;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
@@ -16,13 +17,16 @@ import android.widget.TextView;
 
 import com.myapps.myrecipes.displayingbitmaps.ImageCache;
 import com.myapps.myrecipes.displayingbitmaps.ImageFetcher;
+import com.myapps.myrecipes.parseobjects.Favourite;
 import com.myapps.myrecipes.parseobjects.Rating;
 import com.myapps.myrecipes.parseobjects.Recipe;
+import com.parse.DeleteCallback;
 import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,6 +52,8 @@ public class RecipeActivity extends AppCompatActivity {
 	private ImageFetcher imageFetcher;
 
 	private String recipeId;
+	private Favourite favouriteRecipe;
+	private FloatingActionButton fab;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +100,50 @@ public class RecipeActivity extends AppCompatActivity {
 		}
 		if (recipeId == null)
 			return;
+		fab = (FloatingActionButton) findViewById(R.id.fab);
+		fab.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (favouriteRecipe != null) {
+					favouriteRecipe.deleteEventually(new DeleteCallback() {
+						@Override
+						public void done(ParseException e) {
+							if (e == null) {
+								favouriteRecipe = null;
+								updateFabButtton();
+							} else
+								Log.e("DEBUG_TAG", "Favourite", e);
+						}
+
+					});
+				} else {
+					favouriteRecipe = new Favourite();
+					favouriteRecipe.setRecipe(recipeId);
+					favouriteRecipe.setUser(ParseUser.getCurrentUser());
+					favouriteRecipe.saveEventually(new SaveCallback() {
+						@Override
+						public void done(ParseException e) {
+							if (e == null) {
+								updateFabButtton();
+							} else
+								Log.e("DEBUG_TAG", "Favourite", e);
+						}
+					});
+				}
+			}
+		});
+
+		ParseQuery<Favourite> query = Favourite.getQuery();
+		query.whereEqualTo("recipe", ParseObject.createWithoutData("Recipe", recipeId));
+		query.whereEqualTo("user", ParseUser.getCurrentUser());
+		query.getFirstInBackground(new GetCallback<Favourite>() {
+			@Override
+			public void done(Favourite favourite, ParseException e) {
+				if (e == null)
+					favouriteRecipe = favourite;
+				updateFabButtton();
+			}
+		});
 		final RatingBar ratingBar = (RatingBar) findViewById(R.id.recipeRatingBar);
 		ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
 			@Override
@@ -121,10 +171,10 @@ public class RecipeActivity extends AppCompatActivity {
 			}
 		});
 
-		ParseQuery<Rating> query = Rating.getQuery();
-		query.whereEqualTo("recipe", ParseObject.createWithoutData("Recipe", recipeId));
-		query.whereEqualTo("user", ParseUser.getCurrentUser());
-		query.getFirstInBackground(new GetCallback<Rating>() {
+		ParseQuery<Rating> ratingParseQuery = Rating.getQuery();
+		ratingParseQuery.whereEqualTo("recipe", ParseObject.createWithoutData("Recipe", recipeId));
+		ratingParseQuery.whereEqualTo("user", ParseUser.getCurrentUser());
+		ratingParseQuery.getFirstInBackground(new GetCallback<Rating>() {
 			@Override
 			public void done(Rating rating, ParseException e) {
 				if (e == null) {
@@ -133,6 +183,13 @@ public class RecipeActivity extends AppCompatActivity {
 			}
 		});
 
+	}
+
+	private void updateFabButtton() {
+		if (favouriteRecipe != null)
+			fab.setImageResource(R.drawable.ic_favorite_black_24dp);
+		else
+			fab.setImageResource(R.drawable.ic_favorite_border_black_24dp);
 	}
 
 	private void setUpImageLoader() {
