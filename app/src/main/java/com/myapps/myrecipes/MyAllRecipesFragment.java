@@ -30,6 +30,7 @@ public class MyAllRecipesFragment extends Fragment {
 	protected List<Recipe> recipeList;
 	protected GridAdapter gridAdapter;
 	protected ParseQuery<Recipe> query;
+	protected GridView gridView;
 
 	public MyAllRecipesFragment() {
 		// Required empty public constructor
@@ -46,8 +47,8 @@ public class MyAllRecipesFragment extends Fragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		GridView observableGridView = (GridView) view.findViewById(R.id.my_all_recipes_gridView);
-		observableGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+		gridView = (GridView) view.findViewById(R.id.my_all_recipes_gridView);
+		gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				Recipe recipe = recipeList.get(position);
@@ -64,7 +65,7 @@ public class MyAllRecipesFragment extends Fragment {
 		});
 		recipeList = new ArrayList<>();
 		gridAdapter = new GridAdapter(getActivity(), recipeList);
-		observableGridView.setAdapter(gridAdapter);
+		gridView.setAdapter(gridAdapter);
 		query = Recipe.getQuery();
 	}
 
