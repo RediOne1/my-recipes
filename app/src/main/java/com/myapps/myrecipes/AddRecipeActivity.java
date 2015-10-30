@@ -2,8 +2,8 @@ package com.myapps.myrecipes;
 
 import android.animation.Animator;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
-import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -22,7 +22,6 @@ import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,10 +32,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.myapps.myrecipes.parseobjects.Ingredient;
 import com.myapps.myrecipes.parseobjects.Recipe;
 import com.parse.FindCallback;
@@ -71,8 +70,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 	private static final String PHOTO_PATH = "path";
 	private static final String INGREDIENTS = "ingredients";
 	private static final String DESCRIPTION = "description";
-
-	private Toolbar toolbar;
+	private static ProgressDialog progressDialog;
 	private ImageView recipeImage;
 	private EditText title;
 	private String mCurrentPhotoPath;
@@ -85,19 +83,21 @@ public class AddRecipeActivity extends AppCompatActivity {
 	private ArrayAdapter<Ingredient> ingredientsAdapter;
 	private List<Ingredient> ingredientsList;
 	private Button addIngredient;
-	private FloatingActionButton fab;
-	private boolean mFabIsShown;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_recipe);
+		progressDialog = new ProgressDialog(this);
+		progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+		progressDialog.setMessage(getString(R.string.adding_recipe));
+		progressDialog.setCancelable(false);
 
-		toolbar = (Toolbar) findViewById(R.id.toolbar);
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		recipe = new Recipe();
 		recipe.setAuthor(ParseUser.getCurrentUser());
-		fab = (FloatingActionButton) findViewById(R.id.fab_add_photo);
+		FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_add_photo);
 		fab.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -287,23 +287,21 @@ public class AddRecipeActivity extends AppCompatActivity {
 		int photoH = bmOptions.outHeight;
 
 		/* Figure out which way needs to be reduced less */
-		int scaleFactor = 1;
-		if ((targetW > 0) || (targetH > 0)) {
+		int scaleFactor = 2;
+		if ((targetW > 0) && (targetH > 0)) {
 			scaleFactor = Math.max(photoW / targetW, photoH / targetH);
 		}
 
 		/* Set bitmap options to scale the image decode target */
 		bmOptions.inJustDecodeBounds = false;
 		bmOptions.inSampleSize = scaleFactor;
+		bmOptions.inPurgeable = true;
 
 		Matrix matrix = new Matrix();
 		matrix.postRotate(getRotation());
 
 		/* Decode the JPEG file into a Bitmap */
 		Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath, bmOptions);
-		Log.d("DEBUG_TAG", "outWidth: " + bmOptions.outWidth + ", outHeight: " + bmOptions.outHeight);
-		Log.d("DEBUG_TAG", "bitmapWidth: " + bitmap.getWidth() + ", bitmapHeight: " + bitmap.getHeight());
-		Log.d("DEBUG_TAG", "imageWidth: " + targetW + ", imageHeight: " + targetH);
 		bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, false);
 
 		/* Associate the Bitmap to the ImageView */
@@ -356,19 +354,9 @@ public class AddRecipeActivity extends AppCompatActivity {
 		}
 	}
 
-	private void saveScaledPhoto(String filePath, SaveCallback saveCallback) {
+	private void saveScaledPhoto(SaveCallback saveCallback) {
 
-		// Resize photo from camera byte array
-		Bitmap mealImage = BitmapFactory.decodeFile(filePath);
-		Bitmap mealImageScaled = Bitmap.createScaledBitmap(mealImage, 1024, 1024
-				* mealImage.getHeight() / mealImage.getWidth(), false);
-
-		// Override Android default landscape orientation and save portrait
-		Matrix matrix = new Matrix();
-		matrix.postRotate(getRotation());
-		Bitmap rotatedScaledMealImage = Bitmap.createBitmap(mealImageScaled, 0,
-				0, mealImageScaled.getWidth(), mealImageScaled.getHeight(),
-				matrix, true);
+		Bitmap rotatedScaledMealImage = ((BitmapDrawable) recipeImage.getDrawable()).getBitmap();
 
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		rotatedScaledMealImage.compress(Bitmap.CompressFormat.JPEG, 100, bos);
@@ -380,6 +368,9 @@ public class AddRecipeActivity extends AppCompatActivity {
 		photoFile.saveInBackground(saveCallback, new ProgressCallback() {
 			@Override
 			public void done(Integer progress) {
+				if (!progressDialog.isShowing())
+					progressDialog.show();
+				progressDialog.setProgress(progress);
 			}
 		});
 	}
@@ -403,8 +394,9 @@ public class AddRecipeActivity extends AppCompatActivity {
 		if (id == R.id.action_settings) {
 			return true;
 		} else if (id == R.id.action_save) {
+			progressDialog.show();
 			if (mCurrentPhotoPath != null)
-				saveScaledPhoto(mCurrentPhotoPath, new SaveCallback() {
+				saveScaledPhoto(new SaveCallback() {
 
 					public void done(ParseException e) {
 						if (e != null) {
@@ -451,6 +443,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 					startActivity(intent);
 					finish();
 				}
+				progressDialog.cancel();
 			}
 		});
 	}

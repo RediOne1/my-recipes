@@ -54,6 +54,7 @@ public class GridAdapter extends BaseAdapter {
 
 		ImageView imageView = (ImageView) convertView.findViewById(R.id.recipe_image);
 		TextView title = (TextView) convertView.findViewById(R.id.info_text);
+		imageView.setImageDrawable(null);
 		imageFetcher.loadImage(recipe.getPhotoUrl(), imageView);
 		title.setText(recipe.getName());
 

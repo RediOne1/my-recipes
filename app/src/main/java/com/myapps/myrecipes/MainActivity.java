@@ -211,8 +211,8 @@ public class MainActivity extends AppCompatActivity
 			showFragment(LastAddedFragment.newInstance());
 			setTitle(getString(R.string.home_page));
 		} else if (id == R.id.favourite_recipes_menuitem) {
-
-			setTitle(getString(R.string.my_recipes));
+			showFragment(FavouriteRecipesFragment.newInstance());
+			setTitle(getString(R.string.favourite_recipes));
 		} else if (id == R.id.my_recipes_menuitem) {
 			showFragment(MyRecipesFragment.newInstance());
 			setTitle(getString(R.string.my_recipes));
