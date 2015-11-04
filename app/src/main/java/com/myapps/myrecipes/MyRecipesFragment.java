@@ -1,6 +1,7 @@
 package com.myapps.myrecipes;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -35,6 +36,7 @@ public class MyRecipesFragment extends MyAllRecipesFragment {
 		if (parseUser == null)
 			return;
 		query.whereEqualTo("author", parseUser);
+		query.fromLocalDatastore();
 		registerForContextMenu(gridView);
 	}
 
@@ -50,13 +52,24 @@ public class MyRecipesFragment extends MyAllRecipesFragment {
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 		switch (item.getItemId()) {
+
+			case R.id.edit_recipe:
+				Recipe recipe = recipeList.get(info.position);
+				editRecipe(recipe);
+				return true;
 			case R.id.delete_recipe:
-				Recipe recipe = recipeList.remove(info.position);
-				recipe.deleteEventually();
+				Recipe recipe2 = recipeList.remove(info.position);
+				recipe2.deleteEventually();
 				gridAdapter.notifyDataSetChanged();
 				return true;
 			default:
 				return super.onContextItemSelected(item);
 		}
+	}
+
+	private void editRecipe(Recipe recipe) {
+		Intent intent = new Intent(getContext(), AddRecipeActivity.class);
+		intent.putExtra(AddRecipeActivity.ID, recipe.getObjectId());
+		startActivity(intent);
 	}
 }

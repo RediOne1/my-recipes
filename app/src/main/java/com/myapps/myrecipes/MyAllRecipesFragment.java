@@ -4,7 +4,6 @@ package com.myapps.myrecipes;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,18 +78,6 @@ public class MyAllRecipesFragment extends Fragment {
 					Toast.makeText(getActivity(),
 							"Error saving: " + e.getMessage(),
 							Toast.LENGTH_LONG).show();
-					query.fromLocalDatastore();
-					query.findInBackground(new FindCallback<Recipe>() {
-						@Override
-						public void done(List<Recipe> list, ParseException e) {
-							if (e == null) {
-								recipeList.clear();
-								recipeList.addAll(list);
-								gridAdapter.notifyDataSetChanged();
-							} else
-								Log.e(getClass().getSimpleName(), "findQuery", e);
-						}
-					});
 				} else {
 					recipeList.clear();
 					recipeList.addAll(list);

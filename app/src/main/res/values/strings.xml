@@ -140,4 +140,5 @@
 	<string name="title_activity_main2">Main2Activity</string>
 	<string name="adding_recipe">Dodawanie przepisu&#8230;</string>
 	<string name="delete_recipe">Usuń przepis</string>
+	<string name="edit_recipe">Edytuj przepis</string>
 </resources>

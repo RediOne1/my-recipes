@@ -39,6 +39,7 @@ import android.widget.Toast;
 import com.myapps.myrecipes.parseobjects.Ingredient;
 import com.myapps.myrecipes.parseobjects.Recipe;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
@@ -62,20 +63,21 @@ import java.util.Locale;
 
 public class AddRecipeActivity extends AppCompatActivity {
 
+	public static final String ID = "recipeId";
+	public static final String TITLE = "title";
+	public static final String SELECTED_CATEGORY = "category";
+	public static final String SELECTED_DIFFICULTY = "difficulty";
+	public static final String BITMAP = "bitmap";
+	public static final String PHOTO_PATH = "path";
+	public static final String INGREDIENTS = "ingredients";
+	public static final String DESCRIPTION = "description";
 	private static final int REQUEST_IMAGE_CAPTURE = 1;
-	private static final String TITLE = "title";
-	private static final String SELECTED_CATEGORY = "category";
-	private static final String SELECTED_DIFFICULTY = "difficulty";
-	private static final String BITMAP = "bitmap";
-	private static final String PHOTO_PATH = "path";
-	private static final String INGREDIENTS = "ingredients";
-	private static final String DESCRIPTION = "description";
 	private static ProgressDialog progressDialog;
 	private ImageView recipeImage;
 	private EditText title;
 	private String mCurrentPhotoPath;
 	private ParseFile photoFile;
-	private Recipe recipe;
+	private Recipe recipe = null;
 	private Spinner categorySpinner;
 	private Spinner difficultySpinner;
 	private EditText description;
@@ -88,6 +90,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_recipe);
+
 		progressDialog = new ProgressDialog(this);
 		progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		progressDialog.setMessage(getString(R.string.adding_recipe));
@@ -95,8 +98,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
-		recipe = new Recipe();
-		recipe.setAuthor(ParseUser.getCurrentUser());
+
 		FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_add_photo);
 		fab.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -108,6 +110,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 		ingredientsLayout = (LinearLayout) findViewById(R.id.ingredients_layout);
 		ingredientsList = new ArrayList<>();
 		ingredientsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, ingredientsList);
+
 		ParseQuery<Ingredient> parseQuery = Ingredient.getQuery();
 		parseQuery.findInBackground(new FindCallback<Ingredient>() {
 			@Override
@@ -117,6 +120,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 				ingredientsAdapter.notifyDataSetChanged();
 			}
 		});
+
 		addIngredient = (Button) findViewById(R.id.add_ingredient);
 		addIngredient.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -140,6 +144,29 @@ public class AddRecipeActivity extends AppCompatActivity {
 		description = (EditText) findViewById(R.id.add_recipe_description);
 		title = (EditText) findViewById(R.id.add_title_editText);
 		setupAddTitle();
+
+		Bundle bundle = getIntent().getExtras();
+		if (bundle != null) {
+			String objectId = bundle.getString(ID);
+			ParseQuery<Recipe> recipeParseQuery = Recipe.getQuery();
+			recipeParseQuery.fromLocalDatastore();
+			recipeParseQuery.getInBackground(objectId, new GetCallback<Recipe>() {
+				@Override
+				public void done(Recipe recipe2, ParseException e) {
+					if (recipe2 != null) {
+						recipe = recipe2;
+						title.setText(recipe.getName());
+						addIngredientsFromJSON(recipe.getIngredientJSON());
+						description.setText(recipe.getDescription());
+
+					}
+				}
+			});
+		}
+		if (recipe == null)
+			recipe = new Recipe();
+
+		recipe.setAuthor(ParseUser.getCurrentUser());
 	}
 
 	private void addIngredient() {
