@@ -50,7 +50,7 @@ public class MyAllRecipesFragment extends Fragment {
 		recipeList = new ArrayList<>();
 
 		recyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
-		RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
+		RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), getResources().getInteger(R.integer.grid_column_count), GridLayoutManager.VERTICAL, false);
 		adapter = new RecipeAdapter(recipeList, new RecipeAdapter.ViewHolder.OnItemClickListener() {
 			@Override
 			public void onItemClick(View view, int position) {
