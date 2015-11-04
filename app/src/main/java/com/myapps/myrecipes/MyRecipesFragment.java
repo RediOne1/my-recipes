@@ -32,6 +32,13 @@ public class MyRecipesFragment extends MyAllRecipesFragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
+		adapter.setOnItemLongClickListener(new RecipeAdapter.OnItemLongClickListener() {
+			@Override
+			public boolean onItemLongClick(View view, int position) {
+				view.setOnCreateContextMenuListener(MyRecipesFragment.this);
+				return true;
+			}
+		});
 		ParseUser parseUser = ParseUser.getCurrentUser();
 		if (parseUser == null)
 			return;
@@ -47,7 +54,7 @@ public class MyRecipesFragment extends MyAllRecipesFragment {
 		inflater.inflate(R.menu.context_menu, menu);
 	}
 
-	/*@Override
+	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 		switch (item.getItemId()) {
@@ -58,13 +65,13 @@ public class MyRecipesFragment extends MyAllRecipesFragment {
 				return true;
 			case R.id.delete_recipe:
 				Recipe recipe2 = recipeList.remove(info.position);
+				adapter.notifyItemRemoved(info.position);
 				recipe2.deleteEventually();
-				gridAdapter.notifyDataSetChanged();
 				return true;
 			default:
 				return super.onContextItemSelected(item);
 		}
-	}*/
+	}
 
 	private void editRecipe(Recipe recipe) {
 		Intent intent = new Intent(getContext(), AddRecipeActivity.class);

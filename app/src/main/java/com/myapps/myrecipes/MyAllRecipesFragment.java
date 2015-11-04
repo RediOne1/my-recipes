@@ -28,8 +28,8 @@ public class MyAllRecipesFragment extends Fragment {
 
 	protected ParseQuery<Recipe> query;
 	protected RecyclerView recyclerView;
-	private List<Recipe> recipeList;
-	private RecyclerView.Adapter adapter;
+	protected List<Recipe> recipeList;
+	protected RecipeAdapter adapter;
 
 	public MyAllRecipesFragment() {
 		// Required empty public constructor
@@ -51,7 +51,8 @@ public class MyAllRecipesFragment extends Fragment {
 
 		recyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
 		RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), getResources().getInteger(R.integer.grid_column_count), GridLayoutManager.VERTICAL, false);
-		adapter = new RecipeAdapter(recipeList, new RecipeAdapter.ViewHolder.OnItemClickListener() {
+		adapter = new RecipeAdapter(recipeList);
+		adapter.setOnItemClickListener(new RecipeAdapter.OnItemClickListener() {
 			@Override
 			public void onItemClick(View view, int position) {
 				Recipe recipe = recipeList.get(position);
@@ -64,11 +65,6 @@ public class MyAllRecipesFragment extends Fragment {
 				intent.putExtra(RecipeActivity.PHOTO_URL, recipe.getPhotoUrl());
 				intent.putExtra(RecipeActivity.DESCRIPTION, recipe.getDescription());
 				startActivity(intent);
-			}
-
-			@Override
-			public boolean onLongClickListener(View view, int position) {
-				return false;
 			}
 		});
 

@@ -21,15 +21,11 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 
 	private List<Recipe> recipeList;
 	private ImageFetcher imageFetcher;
-	private ViewHolder.OnItemClickListener listener;
+	private OnItemClickListener onItemClickListener;
+	private OnItemLongClickListener onItemLongClickListener;
 
 	public RecipeAdapter(List<Recipe> recipeList) {
 		this.recipeList = recipeList;
-	}
-
-	public RecipeAdapter(List<Recipe> recipeList, ViewHolder.OnItemClickListener listener) {
-		this.recipeList = recipeList;
-		this.listener = listener;
 	}
 
 	@Override
@@ -37,9 +33,18 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 		imageFetcher = ((MainActivity) parent.getContext()).getImageFetcher();
 		View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.recipe_list_item, parent, false);
 
-		ViewHolder viewHolder = listener == null ?
-				new ViewHolder(view)
-				: new ViewHolder(view, listener);
+		ViewHolder viewHolder = new ViewHolder(view, new ViewHolder.OnItemClickListener() {
+			@Override
+			public void onItemClick(View view, int position) {
+				if (onItemClickListener != null)
+					onItemClickListener.onItemClick(view, position);
+			}
+
+			@Override
+			public boolean onLongClickListener(View view, int position) {
+				return false;
+			}
+		});
 
 		viewHolder.title = (TextView) view.findViewById(R.id.recipe_title);
 		viewHolder.image = (ImageView) view.findViewById(R.id.recipe_image);
@@ -58,7 +63,23 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 		return recipeList.size();
 	}
 
-	public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
+	public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+		this.onItemClickListener = onItemClickListener;
+	}
+
+	public void setOnItemLongClickListener(OnItemLongClickListener onItemLongClickListener) {
+		this.onItemLongClickListener = onItemLongClickListener;
+	}
+
+	public interface OnItemClickListener {
+		void onItemClick(View view, int position);
+	}
+
+	public interface OnItemLongClickListener {
+		boolean onItemLongClick(View view, int position);
+	}
+
+	public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
 
 		public TextView title;
 		public ImageView image;
