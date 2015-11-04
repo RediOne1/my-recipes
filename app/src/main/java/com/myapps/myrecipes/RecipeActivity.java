@@ -86,7 +86,7 @@ public class RecipeActivity extends AppCompatActivity {
 				query.getInBackground(recipeId, new GetCallback<Recipe>() {
 					@Override
 					public void done(Recipe recipe, ParseException e) {
-						setTitle(recipe.getName());
+						setTitle(recipe.getTitle());
 						category.setText(recipe.getCategory());
 						difficulty.setText(recipe.getDifficulty());
 						description.setText(recipe.getDescription());

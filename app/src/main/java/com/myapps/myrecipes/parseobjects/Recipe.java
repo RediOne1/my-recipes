@@ -31,7 +31,7 @@ public class Recipe extends ParseObject {
 		put("photo", photoFile);
 	}
 
-	public String getName() {
+	public String getTitle() {
 		return getString("name");
 	}
 

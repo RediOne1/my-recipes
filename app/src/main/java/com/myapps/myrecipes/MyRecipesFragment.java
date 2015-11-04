@@ -37,7 +37,6 @@ public class MyRecipesFragment extends MyAllRecipesFragment {
 			return;
 		query.whereEqualTo("author", parseUser);
 		query.fromLocalDatastore();
-		registerForContextMenu(gridView);
 	}
 
 	@Override
@@ -48,7 +47,7 @@ public class MyRecipesFragment extends MyAllRecipesFragment {
 		inflater.inflate(R.menu.context_menu, menu);
 	}
 
-	@Override
+	/*@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
 		switch (item.getItemId()) {
@@ -65,7 +64,7 @@ public class MyRecipesFragment extends MyAllRecipesFragment {
 			default:
 				return super.onContextItemSelected(item);
 		}
-	}
+	}*/
 
 	private void editRecipe(Recipe recipe) {
 		Intent intent = new Intent(getContext(), AddRecipeActivity.class);

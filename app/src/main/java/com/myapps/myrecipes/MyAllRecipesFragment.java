@@ -4,11 +4,11 @@ package com.myapps.myrecipes;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.Toast;
 
 import com.myapps.myrecipes.parseobjects.Recipe;
@@ -26,10 +26,10 @@ import java.util.List;
 public class MyAllRecipesFragment extends Fragment {
 
 
-	protected List<Recipe> recipeList;
-	protected GridAdapter gridAdapter;
 	protected ParseQuery<Recipe> query;
-	protected GridView gridView;
+	protected RecyclerView recyclerView;
+	private List<Recipe> recipeList;
+	private RecyclerView.Adapter adapter;
 
 	public MyAllRecipesFragment() {
 		// Required empty public constructor
@@ -46,14 +46,18 @@ public class MyAllRecipesFragment extends Fragment {
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 		super.onViewCreated(view, savedInstanceState);
-		gridView = (GridView) view.findViewById(R.id.my_all_recipes_gridView);
-		gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+		recipeList = new ArrayList<>();
+
+		recyclerView = (RecyclerView) view.findViewById(R.id.my_recycler_view);
+		RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getContext(), 2, GridLayoutManager.VERTICAL, false);
+		adapter = new RecipeAdapter(recipeList, new RecipeAdapter.ViewHolder.OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+			public void onItemClick(View view, int position) {
 				Recipe recipe = recipeList.get(position);
 				Intent intent = new Intent(getActivity(), RecipeActivity.class);
 				intent.putExtra(RecipeActivity.RECIPE_ID, recipe.getObjectId());
-				intent.putExtra(RecipeActivity.RECIPE_NAME, recipe.getName());
+				intent.putExtra(RecipeActivity.RECIPE_NAME, recipe.getTitle());
 				intent.putExtra(RecipeActivity.CATEGORY, recipe.getCategory());
 				intent.putExtra(RecipeActivity.DIFFICULTY, recipe.getDifficulty());
 				intent.putExtra(RecipeActivity.INGREDIENTS, recipe.getIngredientJSON());
@@ -61,16 +65,25 @@ public class MyAllRecipesFragment extends Fragment {
 				intent.putExtra(RecipeActivity.DESCRIPTION, recipe.getDescription());
 				startActivity(intent);
 			}
+
+			@Override
+			public boolean onLongClickListener(View view, int position) {
+				return false;
+			}
 		});
-		recipeList = new ArrayList<>();
-		gridAdapter = new GridAdapter(getActivity(), recipeList);
-		gridView.setAdapter(gridAdapter);
+
+		recyclerView.setLayoutManager(layoutManager);
+		recyclerView.setAdapter(adapter);
 		query = Recipe.getQuery();
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
+		updateRecipes();
+	}
+
+	private void updateRecipes() {
 		query.findInBackground(new FindCallback<Recipe>() {
 			@Override
 			public void done(List<Recipe> list, ParseException e) {
@@ -79,9 +92,26 @@ public class MyAllRecipesFragment extends Fragment {
 							"Error saving: " + e.getMessage(),
 							Toast.LENGTH_LONG).show();
 				} else {
-					recipeList.clear();
-					recipeList.addAll(list);
-					gridAdapter.notifyDataSetChanged();
+					for (int i = 0; i < recipeList.size(); i++) {
+						Recipe recipe = recipeList.get(i);
+						if (!list.contains(recipe)) {
+							recipeList.remove(i);
+							adapter.notifyItemRemoved(i);
+							i--;
+						}
+					}
+
+					for (int i = 0; i < list.size(); i++) {
+						Recipe recipe = list.get(i);
+						if (!recipeList.contains(recipe)) {
+							recipeList.add(i, recipe);
+							adapter.notifyItemInserted(i);
+						} else {
+							int oldPosition = recipeList.indexOf(recipe);
+							recipeList.add(i, recipeList.remove(oldPosition));
+							adapter.notifyItemMoved(oldPosition, i);
+						}
+					}
 				}
 			}
 		});

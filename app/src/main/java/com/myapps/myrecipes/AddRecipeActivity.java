@@ -155,7 +155,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 				public void done(Recipe recipe2, ParseException e) {
 					if (recipe2 != null) {
 						recipe = recipe2;
-						title.setText(recipe.getName());
+						title.setText(recipe.getTitle());
 						addIngredientsFromJSON(recipe.getIngredientJSON());
 						description.setText(recipe.getDescription());
 
@@ -461,7 +461,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 				} else {
 					Intent intent = new Intent(getApplicationContext(), RecipeActivity.class);
 					intent.putExtra(RecipeActivity.RECIPE_ID, recipe.getObjectId());
-					intent.putExtra(RecipeActivity.RECIPE_NAME, recipe.getName());
+					intent.putExtra(RecipeActivity.RECIPE_NAME, recipe.getTitle());
 					intent.putExtra(RecipeActivity.CATEGORY, recipe.getCategory());
 					intent.putExtra(RecipeActivity.DIFFICULTY, recipe.getDifficulty());
 					intent.putExtra(RecipeActivity.INGREDIENTS, recipe.getIngredientJSON());

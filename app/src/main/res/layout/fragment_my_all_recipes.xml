@@ -4,7 +4,7 @@
              android:layout_height="match_parent"
              tools:context="com.myapps.myrecipes.LastAddedFragment">
 
-	<GridView
+	<!--<GridView
 		android:id="@+id/my_all_recipes_gridView"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
@@ -14,6 +14,12 @@
 		android:numColumns="@integer/grid_column_count"
 		android:padding="10dp"
 		android:stretchMode="columnWidth"
-		android:verticalSpacing="10dp"/>
+		android:verticalSpacing="10dp"/>-->
 
+	<android.support.v7.widget.RecyclerView
+		android:id="@+id/my_recycler_view"
+		android:scrollbars="vertical"
+		android:layout_marginTop="?attr/actionBarSize"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"/>
 </FrameLayout>
