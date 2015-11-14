@@ -141,4 +141,5 @@
 	<string name="adding_recipe">Dodawanie przepisu&#8230;</string>
 	<string name="delete_recipe">Usuń przepis</string>
 	<string name="edit_recipe">Edytuj przepis</string>
+	<string name="delete_confirm">Are you sure you want to delete recipe?</string>
 </resources>

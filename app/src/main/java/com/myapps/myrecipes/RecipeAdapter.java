@@ -22,7 +22,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 	private List<Recipe> recipeList;
 	private ImageFetcher imageFetcher;
 	private OnItemClickListener onItemClickListener;
-	private OnItemLongClickListener onItemLongClickListener;
 
 	public RecipeAdapter(List<Recipe> recipeList) {
 		this.recipeList = recipeList;
@@ -38,11 +37,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 			public void onItemClick(View view, int position) {
 				if (onItemClickListener != null)
 					onItemClickListener.onItemClick(view, position);
-			}
-
-			@Override
-			public boolean onLongClickListener(View view, int position) {
-				return false;
 			}
 		});
 
@@ -67,27 +61,15 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 		this.onItemClickListener = onItemClickListener;
 	}
 
-	public void setOnItemLongClickListener(OnItemLongClickListener onItemLongClickListener) {
-		this.onItemLongClickListener = onItemLongClickListener;
-	}
-
 	public interface OnItemClickListener {
 		void onItemClick(View view, int position);
 	}
 
-	public interface OnItemLongClickListener {
-		boolean onItemLongClick(View view, int position);
-	}
-
-	public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
+	public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
 		public TextView title;
 		public ImageView image;
 		public OnItemClickListener listener;
-
-		public ViewHolder(View itemView) {
-			super(itemView);
-		}
 
 		public ViewHolder(View itemView, OnItemClickListener listener) {
 			super(itemView);
@@ -95,7 +77,6 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 			this.listener = listener;
 			if (this.listener != null) {
 				itemView.setOnClickListener(this);
-				itemView.setOnLongClickListener(this);
 			}
 		}
 
@@ -104,15 +85,8 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecipeAdapter.ViewHolder
 			listener.onItemClick(v, getAdapterPosition());
 		}
 
-		@Override
-		public boolean onLongClick(View v) {
-			return listener.onLongClickListener(v, getAdapterPosition());
-		}
-
 		public interface OnItemClickListener {
 			void onItemClick(View view, int position);
-
-			boolean onLongClickListener(View view, int position);
 		}
 	}
 }

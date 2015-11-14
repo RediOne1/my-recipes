@@ -71,6 +71,7 @@ public class MyAllRecipesFragment extends Fragment {
 		recyclerView.setLayoutManager(layoutManager);
 		recyclerView.setAdapter(adapter);
 		query = Recipe.getQuery();
+
 	}
 
 	@Override

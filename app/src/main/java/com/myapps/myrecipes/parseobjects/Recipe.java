@@ -19,6 +19,10 @@ public class Recipe extends ParseObject {
 		return ParseQuery.getQuery(Recipe.class);
 	}
 
+	public ParseUser getAuthor() {
+		return getParseUser("author");
+	}
+
 	public void setAuthor(ParseUser currentUser) {
 		put("author", currentUser);
 	}

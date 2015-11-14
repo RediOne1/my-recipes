@@ -1,19 +1,25 @@
 package com.myapps.myrecipes;
 
 import android.animation.Animator;
+import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.myapps.myrecipes.displayingbitmaps.ImageCache;
 import com.myapps.myrecipes.displayingbitmaps.ImageFetcher;
@@ -54,6 +60,7 @@ public class RecipeActivity extends AppCompatActivity {
 	private String recipeId;
 	private Favourite favouriteRecipe;
 	private FloatingActionButton fab;
+	private Recipe recipe;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -81,25 +88,14 @@ public class RecipeActivity extends AppCompatActivity {
 			if (photoUrl != null)
 				imageFetcher.loadImage(photoUrl, mImageView);
 		} catch (Exception e) {
-			if (recipeId != null) {
-				ParseQuery<Recipe> query = Recipe.getQuery();
-				query.getInBackground(recipeId, new GetCallback<Recipe>() {
-					@Override
-					public void done(Recipe recipe, ParseException e) {
-						setTitle(recipe.getTitle());
-						category.setText(recipe.getCategory());
-						difficulty.setText(recipe.getDifficulty());
-						description.setText(recipe.getDescription());
-						displayIngredientsFromJSON(recipe.getIngredientJSON());
-						String photoUrl = recipe.getPhotoUrl();
-						if (photoUrl != null)
-							imageFetcher.loadImage(photoUrl, mImageView);
-					}
-				});
-			}
+			e.printStackTrace();
 		}
-		if (recipeId == null)
+
+		if (recipeId != null)
+			fetchRecipe();
+		else
 			return;
+
 		fab = (FloatingActionButton) findViewById(R.id.fab);
 		fab.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -185,6 +181,27 @@ public class RecipeActivity extends AppCompatActivity {
 
 	}
 
+	private void fetchRecipe() {
+		ParseQuery<Recipe> query = Recipe.getQuery();
+		query.getInBackground(recipeId, new GetCallback<Recipe>() {
+			@Override
+			public void done(Recipe recipe, ParseException e) {
+				if (e == null) {
+					RecipeActivity.this.recipe = recipe;
+					setTitle(recipe.getTitle());
+					category.setText(recipe.getCategory());
+					difficulty.setText(recipe.getDifficulty());
+					description.setText(recipe.getDescription());
+					displayIngredientsFromJSON(recipe.getIngredientJSON());
+					String photoUrl = recipe.getPhotoUrl();
+					if (photoUrl != null)
+						imageFetcher.loadImage(photoUrl, mImageView);
+					invalidateOptionsMenu();
+				}
+			}
+		});
+	}
+
 	private void updateFabButtton() {
 		if (favouriteRecipe != null)
 			fab.setImageResource(R.drawable.ic_favorite_black_24dp);
@@ -256,4 +273,60 @@ public class RecipeActivity extends AppCompatActivity {
 			}
 		});
 	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		if (recipe != null && recipe.getAuthor() == ParseUser.getCurrentUser())
+			inflater.inflate(R.menu.menu_recipe_author, menu);
+		else
+			inflater.inflate(R.menu.menu_recipe, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle item selection
+		switch (item.getItemId()) {
+			case R.id.edit_recipe:
+				editRecipe(recipe);
+				return true;
+			case R.id.delete_recipe:
+				showDeleteDialog();
+
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+	}
+
+	private void showDeleteDialog() {
+		new AlertDialog.Builder(this)
+				.setMessage(R.string.delete_confirm)
+				.setCancelable(false)
+				.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						deleteRecipe();
+					}
+				})
+				.setNegativeButton(android.R.string.no, null)
+				.show();
+	}
+
+	private void deleteRecipe() {
+		recipe.deleteInBackground(new DeleteCallback() {
+			@Override
+			public void done(ParseException e) {
+				if (e != null)
+					Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+				else
+					finish();
+			}
+		});
+	}
+
+	private void editRecipe(Recipe recipe) {
+
+	}
+
 }
