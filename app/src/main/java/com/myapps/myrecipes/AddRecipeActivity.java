@@ -552,6 +552,7 @@ public class AddRecipeActivity extends AppCompatActivity {
 			ingredientJSONObject.put("ingredients", jsonArray);
 		} catch (JSONException e) {
 			e.printStackTrace();
+
 		}
 		return ingredientJSONObject.toString();
 	}

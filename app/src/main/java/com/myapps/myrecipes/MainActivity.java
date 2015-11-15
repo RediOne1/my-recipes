@@ -1,7 +1,11 @@
 package com.myapps.myrecipes;
 
+import android.app.SearchManager;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,6 +13,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.Menu;
@@ -49,6 +54,8 @@ public class MainActivity extends AppCompatActivity
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+
 		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
 		setUpImageLoader();
@@ -167,7 +174,19 @@ public class MainActivity extends AppCompatActivity
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main2, menu);
+		getMenuInflater().inflate(R.menu.menu_main, menu);
+
+		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+		MenuItem searchItem = menu.findItem(R.id.action_search);
+
+		SearchView searchView = null;
+		if (searchItem != null) {
+			searchView = (SearchView) searchItem.getActionView();
+		}
+		if (searchView != null) {
+			searchView.setSearchableInfo(searchManager.getSearchableInfo(new ComponentName(this, SearchActivity.class)));
+		}
+
 		return true;
 	}
 
@@ -205,28 +224,30 @@ public class MainActivity extends AppCompatActivity
 	@Override
 	public boolean onNavigationItemSelected(MenuItem item) {
 		// Handle navigation view item clicks here.
+		CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+
 		int id = item.getItemId();
 
 		if (id == R.id.home_page_menuitem) {
 			showFragment(LastAddedFragment.newInstance());
-			setTitle(getString(R.string.home_page));
+			collapsingToolbarLayout.setTitle(getString(R.string.home_page));
 		} else if (id == R.id.favourite_recipes_menuitem) {
 			showFragment(FavouriteRecipesFragment.newInstance());
-			setTitle(getString(R.string.favourite_recipes));
+			collapsingToolbarLayout.setTitle(getString(R.string.favourite_recipes));
 		} else if (id == R.id.my_recipes_menuitem) {
 			showFragment(MyRecipesFragment.newInstance());
-			setTitle(getString(R.string.my_recipes));
+			collapsingToolbarLayout.setTitle(getString(R.string.my_recipes));
 		} else if (id == R.id.add_recipe_menuitem) {
 			Intent i = new Intent(this, AddRecipeActivity.class);
 			startActivity(i);
 		} else if (id == R.id.top_rated_menuitem) {
 			showFragment(TopRatedRecipesFragment.newInstance());
-			setTitle(getString(R.string.top_rated));
+			collapsingToolbarLayout.setTitle(getString(R.string.top_rated));
 		} else if (id == R.id.last_added_menuitem) {
 			showFragment(LastAddedFragment.newInstance());
-			setTitle(getString(R.string.last_added));
+			collapsingToolbarLayout.setTitle(getString(R.string.last_added));
 		} else if (id == R.id.categories_menuitem) {
-			setTitle(getString(R.string.categories));
+			collapsingToolbarLayout.setTitle(getString(R.string.categories));
 
 		} else if (id == R.id.settings_menuitem) {
 
