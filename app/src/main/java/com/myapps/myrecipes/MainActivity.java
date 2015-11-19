@@ -24,29 +24,26 @@ import android.widget.TextView;
 import com.facebook.AccessToken;
 import com.facebook.AccessTokenTracker;
 import com.facebook.CallbackManager;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
 import com.facebook.Profile;
+import com.facebook.ProfileTracker;
+import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.facebook.login.widget.ProfilePictureView;
 import com.myapps.myrecipes.displayingbitmaps.ImageCache;
 import com.myapps.myrecipes.displayingbitmaps.ImageFetcher;
-import com.parse.LogInCallback;
-import com.parse.ParseException;
+import com.myapps.myrecipes.parseobjects.MyParseUser;
+import com.parse.ParseAnonymousUtils;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity
 		implements NavigationView.OnNavigationItemSelectedListener {
 
 	private static final String IMAGE_CACHE_DIR = "images";
-	private LoginButton loginButton;
 	private ProfilePictureView profilePictureView;
 	private TextView profileName;
-	private TextView profileMail;
 	private CallbackManager callbackManager;
 	private ImageFetcher imageFetcher;
 
@@ -66,17 +63,103 @@ public class MainActivity extends AppCompatActivity
 		drawer.setDrawerListener(toggle);
 		toggle.syncState();
 
+		callbackManager = CallbackManager.Factory.create();
+
 		NavigationView navigation = (NavigationView) findViewById(R.id.nav_view);
 		navigation.setNavigationItemSelectedListener(this);
 		navigation.setCheckedItem(R.id.home_page_menuitem);
 		onNavigationItemSelected(navigation.getMenu().findItem(R.id.home_page_menuitem));
+
+
 		View navigationView = navigation.inflateHeaderView(R.layout.nav_header_main);
-		loginButton = (LoginButton) navigationView.findViewById(R.id.login_button);
 		profilePictureView = (ProfilePictureView) navigationView.findViewById(R.id.profile_picture);
 		profileName = (TextView) navigationView.findViewById(R.id.profile_name);
-		profileMail = (TextView) navigationView.findViewById(R.id.profile_mail);
-		setupLogin();
+
+		LoginButton loginButton = (LoginButton) navigationView.findViewById(R.id.login_button);
+		loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+
+			private ProfileTracker mProfileTracker;
+
+			@Override
+			public void onSuccess(LoginResult loginResult) {
+				if (Profile.getCurrentProfile() == null) {
+					mProfileTracker = new ProfileTracker() {
+						@Override
+						protected void onCurrentProfileChanged(Profile oldProfile, Profile currentProfile) {
+							linkParseUserIfNeeded(AccessToken.getCurrentAccessToken());
+							updateParseUser();
+							updateUI();
+						}
+					};
+					mProfileTracker.startTracking();
+				} else {
+					linkParseUserIfNeeded(AccessToken.getCurrentAccessToken());
+					updateParseUser();
+					updateUI();
+				}
+			}
+
+			@Override
+			public void onCancel() {
+
+			}
+
+			@Override
+			public void onError(FacebookException error) {
+
+			}
+		});
+
+		startTrackingAccessToken();
 		updateUI();
+	}
+
+	private void startTrackingAccessToken() {
+		AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
+			@Override
+			protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
+				if (currentAccessToken == null) {
+					ParseUser.logOut();
+					ParseAnonymousUtils.logInInBackground();
+					updateUI();
+				}
+			}
+		};
+		if (!accessTokenTracker.isTracking())
+			accessTokenTracker.startTracking();
+	}
+
+	private void linkParseUserIfNeeded(AccessToken currentAccessToken) {
+		if (!ParseFacebookUtils.isLinked(ParseUser.getCurrentUser()))
+			ParseFacebookUtils.linkInBackground(ParseUser.getCurrentUser(), currentAccessToken);
+	}
+
+	private void updateParseUser() {
+		Profile profile = Profile.getCurrentProfile();
+		MyParseUser parseUser = MyParseUser.getCurrentUser();
+		parseUser.setFirstName(profile.getFirstName());
+		parseUser.setMiddleName(profile.getMiddleName());
+		parseUser.setLastName(profile.getLastName());
+		parseUser.saveEventually();
+	}
+
+	private void updateUI() {
+		MyParseUser parseUser = MyParseUser.getCurrentUser();
+		String firstName = parseUser.getFirstName();
+		String lastName = parseUser.getLastName();
+
+		if (firstName == null)
+			firstName = "";
+		lastName = lastName == null ? "" : lastName.substring(0, 1) + ".";
+
+		String profileNameString = firstName + " " + lastName;
+		profileName.setText(profileNameString);
+
+		Profile profile = Profile.getCurrentProfile();
+		if (profile != null)
+			profilePictureView.setProfileId(profile.getId());
+		else
+			profilePictureView.setProfileId(null);
 	}
 
 	private void setUpImageLoader() {
@@ -104,61 +187,6 @@ public class MainActivity extends AppCompatActivity
 
 	public ImageFetcher getImageFetcher() {
 		return imageFetcher;
-	}
-
-	private void setupLogin() {
-		callbackManager = CallbackManager.Factory.create();
-		loginButton.setReadPermissions("user_friends");
-		AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
-			@Override
-			protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
-				if (currentAccessToken == null) {
-					ParseUser.logOut();
-					updateUI();
-				} else
-					ParseFacebookUtils.logInInBackground(currentAccessToken, new LogInCallback() {
-						@Override
-						public void done(ParseUser parseUser, ParseException e) {
-							updateUI();
-
-						}
-					});
-
-			}
-		};
-		accessTokenTracker.startTracking();
-	}
-
-	private void updateUI() {
-		Profile profile = Profile.getCurrentProfile();
-		if (profile != null) {
-			profilePictureView.setVisibility(View.VISIBLE);
-			profilePictureView.setProfileId(profile.getId());
-			profileName.setText(profile.getName());
-			GraphRequest request = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
-				@Override
-				public void onCompleted(JSONObject object, GraphResponse response) {
-					if (object != null)
-						try {
-							if (object.has("email")) {
-								String mail = object.getString("email");
-								profileMail.setText(mail);
-								ParseUser user = ParseUser.getCurrentUser();
-								user.setEmail(mail);
-								user.saveEventually();
-							}
-						} catch (JSONException e) {
-							e.printStackTrace();
-						}
-				}
-			});
-			request.executeAsync();
-		} else {
-			profilePictureView.setVisibility(View.INVISIBLE);
-			profilePictureView.setProfileId(null);
-			profileName.setText("");
-			profileMail.setText("");
-		}
 	}
 
 	@Override
@@ -192,23 +220,20 @@ public class MainActivity extends AppCompatActivity
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 
-		//noinspection SimplifiableIfStatement
-		if (id == R.id.action_settings) {
-			return true;
+		switch (id) {
+			case R.id.action_settings:
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
 		}
 
-		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
 		callbackManager.onActivityResult(requestCode, resultCode, data);
 	}
 

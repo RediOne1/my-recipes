@@ -6,10 +6,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.myapps.myrecipes.parseobjects.Recipe;
 import com.parse.FindCallback;
@@ -85,9 +85,7 @@ public class MyAllRecipesFragment extends Fragment {
 			@Override
 			public void done(List<Recipe> list, ParseException e) {
 				if (e != null) {
-					Toast.makeText(getActivity(),
-							"Error saving: " + e.getMessage(),
-							Toast.LENGTH_LONG).show();
+					Log.e(getClass().getSimpleName(), "updateRecipes", e);
 				} else {
 					for (int i = 0; i < recipeList.size(); i++) {
 						Recipe recipe = recipeList.get(i);

@@ -54,4 +54,6 @@
 	<string name="search_hint">Wprowadź tekst</string>
 	<string name="title_activity_main">MainActivity</string>
 	<string name="search">Szukaj</string>
+	<string name="login_via_facebook">Zaloguj się przez Facebooka</string>
+	<string name="logout">Wyloguj</string>
 </resources>
