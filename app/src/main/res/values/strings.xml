@@ -50,7 +50,7 @@
 	<string name="adding_recipe">Dodawanie przepisu&#8230;</string>
 	<string name="delete_recipe">Usuń przepis</string>
 	<string name="edit_recipe">Edytuj przepis</string>
-	<string name="delete_confirm">Are you sure you want to delete recipe?</string>
+	<string name="delete_confirm">Na pewno chcesz usunąć ten przepis?</string>
 	<string name="search_hint">Wprowadź tekst</string>
 	<string name="title_activity_main">MainActivity</string>
 	<string name="search">Szukaj</string>
@@ -61,4 +61,7 @@
 	<string name="adriankuta">Adrian Kuta</string>
 	<string name="supported_android">Wspierane systemy Android</string>
 	<string name="android">4.0.3+ Ice Cream Sandwich</string>
+	<string name="add_comment">Dodaj komentarz</string>
+	<string name="title_activity_add_comment">Dodaj komentarz</string>
+	<string name="write_comment">Napisz komentarz</string>
 </resources>

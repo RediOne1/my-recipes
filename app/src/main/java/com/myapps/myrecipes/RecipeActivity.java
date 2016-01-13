@@ -2,6 +2,7 @@ package com.myapps.myrecipes;
 
 import android.animation.Animator;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -293,7 +294,11 @@ public class RecipeActivity extends AppCompatActivity {
 				return true;
 			case R.id.delete_recipe:
 				showDeleteDialog();
-
+				return true;
+			case R.id.add_comment:
+				Intent intent = new Intent(this, AddCommentActivity.class);
+				intent.putExtra("recipeId", recipeId);
+				startActivity(intent);
 				return true;
 			default:
 				return super.onOptionsItemSelected(item);
