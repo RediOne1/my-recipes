@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -245,7 +246,7 @@ public class MainActivity extends AppCompatActivity
 		callbackManager.onActivityResult(requestCode, resultCode, data);
 	}
 
-	private void showFragment(Fragment fragment) {
+	public void showFragment(Fragment fragment) {
 		FragmentManager fragmentManager = getSupportFragmentManager();
 		fragmentManager
 				.beginTransaction()
@@ -280,10 +281,12 @@ public class MainActivity extends AppCompatActivity
 			showFragment(LastAddedFragment.newInstance());
 			collapsingToolbarLayout.setTitle(getString(R.string.last_added));
 		} else if (id == R.id.categories_menuitem) {
+			AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.app_bar_layout);
+			appBarLayout.setExpanded(false, true);
+			showFragment(CategoryFrgment.newInstance());
 			collapsingToolbarLayout.setTitle(getString(R.string.categories));
-
 		} else if (id == R.id.settings_menuitem) {
-
+			startActivity(new Intent(this, SettingsActivity.class));
 		}
 
 		DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

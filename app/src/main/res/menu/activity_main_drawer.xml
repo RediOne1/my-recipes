@@ -51,6 +51,7 @@
 	<group android:checkableBehavior="single">
 		<item
 			android:id="@+id/settings_menuitem"
+			android:checkable="false"
 			android:icon="@drawable/ic_settings_black_24dp"
 			android:title="@string/settings"/>
 	</group>

@@ -56,4 +56,9 @@
 	<string name="search">Szukaj</string>
 	<string name="login_via_facebook">Zaloguj się przez Facebooka</string>
 	<string name="logout">Wyloguj</string>
+	<string name="about_app">O aplikacji</string>
+	<string name="author">Autor</string>
+	<string name="adriankuta">Adrian Kuta</string>
+	<string name="supported_android">Wspierane systemy Android</string>
+	<string name="android">4.0.3+ Ice Cream Sandwich</string>
 </resources>
