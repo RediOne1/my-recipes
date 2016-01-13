@@ -16,7 +16,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -33,7 +33,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.myapps.myrecipes.parseobjects.Ingredient;
@@ -205,11 +204,8 @@ public class AddRecipeActivity extends AppCompatActivity {
 	}
 
 	private void setupAddTitle() {
-		final TextView counter = (TextView) findViewById(R.id.add_title_counter);
-		final TextView errorText = (TextView) findViewById(R.id.add_title_errorText);
+		final TextInputLayout textInputLayout = (TextInputLayout) findViewById(R.id.title_input_layout);
 		final int titleMaxLength = getResources().getInteger(R.integer.title_max_length);
-		final String counterPattern = getResources().getString(R.string.character_counter);
-		counter.setText(String.format(counterPattern, 0, titleMaxLength));
 		title.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
@@ -223,17 +219,15 @@ public class AddRecipeActivity extends AppCompatActivity {
 			@Override
 			public void afterTextChanged(Editable editable) {
 				int length = editable.length();
-				counter.setText(String.format(counterPattern, length, titleMaxLength));
 				if (length > titleMaxLength) {
-					counter.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.text_field_error));
-					errorText.setText(R.string.title_too_long);
+					textInputLayout.setErrorEnabled(true);
+					textInputLayout.setError(getString(R.string.title_too_long));
 				} else {
 					if (editable.length() == 0)
 						setTitle(R.string.title_activity_add_recipe);
 					else
 						setTitle(editable.toString());
-					counter.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.helper_text_light));
-					errorText.setText("");
+					textInputLayout.setErrorEnabled(false);
 				}
 			}
 		});

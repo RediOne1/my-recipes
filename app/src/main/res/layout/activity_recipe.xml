@@ -20,7 +20,7 @@
 			app:contentScrim="?attr/colorPrimary"
 			app:expandedTitleMarginEnd="64dp"
 			app:expandedTitleMarginStart="48dp"
-			app:layout_scrollFlags="scroll|snap">
+			app:layout_scrollFlags="scroll">
 
 			<com.myapps.myrecipes.SquareImageView
 				android:id="@+id/image"
@@ -35,7 +35,7 @@
 				android:layout_width="match_parent"
 				android:layout_height="?attr/actionBarSize"
 				app:layout_collapseMode="pin"
-				app:layout_scrollFlags="scroll|snap"/>
+				app:layout_scrollFlags="scroll"/>
 
 		</android.support.design.widget.CollapsingToolbarLayout>
 
@@ -46,8 +46,8 @@
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:clipToPadding="false"
-		app:layout_scrollFlags="scroll|enterAlways"
-		app:layout_behavior="@string/appbar_scrolling_view_behavior">
+		app:layout_behavior="@string/appbar_scrolling_view_behavior"
+		app:layout_scrollFlags="scroll|enterAlways">
 
 		<LinearLayout
 			android:layout_width="match_parent"
@@ -117,9 +117,9 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_marginTop="10dp"
-				android:textSize="16sp"
 				android:paddingLeft="@dimen/content_padding"
-				android:paddingRight="@dimen/content_padding"/>
+				android:paddingRight="@dimen/content_padding"
+				android:textSize="16sp"/>
 
 		</LinearLayout>
 

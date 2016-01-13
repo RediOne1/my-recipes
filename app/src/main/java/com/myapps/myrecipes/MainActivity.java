@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity
 	private TextView profileName;
 	private CallbackManager callbackManager;
 	private ImageFetcher imageFetcher;
+	private boolean onLogOutClick;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +77,13 @@ public class MainActivity extends AppCompatActivity
 		profileName = (TextView) navigationView.findViewById(R.id.profile_name);
 
 		LoginButton loginButton = (LoginButton) navigationView.findViewById(R.id.login_button);
+		loginButton.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (Profile.getCurrentProfile() != null)
+					onLogOutClick = true;
+			}
+		});
 		loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
 
 			private ProfileTracker mProfileTracker;
@@ -118,10 +126,11 @@ public class MainActivity extends AppCompatActivity
 		AccessTokenTracker accessTokenTracker = new AccessTokenTracker() {
 			@Override
 			protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken) {
-				if (currentAccessToken == null) {
+				if (onLogOutClick && currentAccessToken == null) {
 					ParseUser.logOut();
 					ParseAnonymousUtils.logInInBackground();
 					updateUI();
+					onLogOutClick = false;
 				}
 			}
 		};
@@ -130,8 +139,7 @@ public class MainActivity extends AppCompatActivity
 	}
 
 	private void linkParseUserIfNeeded(AccessToken currentAccessToken) {
-		if (!ParseFacebookUtils.isLinked(ParseUser.getCurrentUser()))
-			ParseFacebookUtils.linkInBackground(ParseUser.getCurrentUser(), currentAccessToken);
+		ParseFacebookUtils.logInInBackground(currentAccessToken);
 	}
 
 	private void updateParseUser() {

@@ -1,31 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="10dp">
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="horizontal"
+	android:padding="10dp">
 
-	<AutoCompleteTextView
-		android:id="@+id/ingredient_name"
+	<android.support.design.widget.TextInputLayout
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:completionThreshold="2"
-		android:completionHint="@string/ingredients_completion_hint"
-		android:layout_alignParentStart="true"
-		android:layout_toStartOf="@+id/ingredient_amount"
 		android:layout_alignParentLeft="true"
-		android:layout_toLeftOf="@+id/ingredient_amount"
-		android:hint="@string/ingredient"
-		android:textSize="16sp"/>
+		android:layout_alignParentStart="true"
+		android:layout_toLeftOf="@+id/ingredient_input_layout"
+		android:layout_toStartOf="@+id/ingredient_input_layout">
 
-	<EditText
-		android:id="@+id/ingredient_amount"
+		<AutoCompleteTextView
+			android:id="@+id/ingredient_name"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:completionHint="@string/ingredients_completion_hint"
+			android:completionThreshold="2"
+			android:hint="@string/ingredient"
+			android:textSize="16sp" />
+	</android.support.design.widget.TextInputLayout>
+
+	<android.support.design.widget.TextInputLayout
+		android:id="@+id/ingredient_input_layout"
 		android:layout_width="100dp"
-		android:gravity="center"
 		android:layout_height="wrap_content"
 		android:layout_alignParentEnd="true"
-		android:layout_alignParentRight="true"
-		android:hint="@string/abc_amount"
-		android:textSize="16sp"/>
+		android:layout_alignParentRight="true">
+
+		<EditText
+			android:id="@+id/ingredient_amount"
+			android:layout_width="100dp"
+			android:layout_height="wrap_content"
+			android:gravity="center"
+			android:hint="@string/abc_amount"
+			android:textSize="16sp" />
+
+	</android.support.design.widget.TextInputLayout>
 
 </RelativeLayout>

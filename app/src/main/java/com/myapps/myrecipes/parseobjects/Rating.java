@@ -26,9 +26,6 @@ public class Rating extends ParseObject {
 		put("recipe", recipe);
 	}
 
-	/**
-	 * @param recipeId Recipe id
-	 */
 	public void setRecipe(String recipeId) {
 		put("recipe", ParseObject.createWithoutData("Recipe", recipeId));
 	}

@@ -3,7 +3,9 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:fitsSystemWindows="true">
+	android:fitsSystemWindows="true"
+	android:focusable="true"
+	android:focusableInTouchMode="true">
 
 	<android.support.design.widget.AppBarLayout
 		android:id="@+id/app_bar_layout"
@@ -58,22 +60,14 @@
 				android:paddingLeft="@dimen/content_padding"
 				android:paddingRight="@dimen/content_padding">
 
-				<!--Więcej info dla tego wzorca:
-				https://www.google.com/design/spec/patterns/errors.html#errors-user-input-errors-->
-
-				<LinearLayout
+				<android.support.design.widget.TextInputLayout
+					android:id="@+id/title_input_layout"
 					android:layout_width="match_parent"
-					android:layout_height="88dp"
-					android:orientation="vertical">
-
-					<TextView
-						android:layout_width="wrap_content"
-						android:layout_height="wrap_content"
-						android:paddingLeft="4dp"
-						android:paddingRight="4dp"
-						android:paddingTop="16dp"
-						android:text="@string/add_title"
-						android:textSize="12sp"/>
+					android:layout_height="wrap_content"
+					android:layout_marginTop="10dp"
+					app:counterEnabled="true"
+					app:counterMaxLength="@integer/title_max_length"
+					app:errorEnabled="true">
 
 					<EditText
 						android:id="@+id/add_title_editText"
@@ -82,30 +76,7 @@
 						android:hint="@string/add_title"
 						android:singleLine="true"
 						android:textSize="16sp"/>
-
-					<FrameLayout
-						android:layout_width="match_parent"
-						android:layout_height="wrap_content"
-						android:paddingEnd="4dp"
-						android:paddingStart="4dp">
-
-						<TextView
-							android:id="@+id/add_title_errorText"
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:layout_gravity="start"
-							android:textColor="@color/text_field_error"
-							android:textSize="12sp"/>
-
-						<TextView
-							android:id="@+id/add_title_counter"
-							android:layout_width="wrap_content"
-							android:layout_height="wrap_content"
-							android:layout_gravity="end"
-							android:textColor="@color/helper_text_light"
-							android:textSize="12sp"/>
-					</FrameLayout>
-				</LinearLayout>
+				</android.support.design.widget.TextInputLayout>
 
 				<TextView
 					android:layout_width="wrap_content"
@@ -157,22 +128,18 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"/>
 
-				<TextView
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:labelFor="@+id/add_recipe_description"
-					android:paddingLeft="4dp"
-					android:paddingRight="4dp"
-					android:paddingTop="16dp"
-					android:text="@string/description"
-					android:textSize="12sp"/>
-
-				<EditText
-					android:id="@+id/add_recipe_description"
+				<android.support.design.widget.TextInputLayout
 					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:ems="10"
-					android:inputType="textMultiLine"/>
+					android:layout_height="wrap_content">
+
+					<EditText
+						android:id="@+id/add_recipe_description"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:ems="10"
+						android:hint="@string/description"
+						android:inputType="textMultiLine"/>
+				</android.support.design.widget.TextInputLayout>
 
 			</LinearLayout>
 		</RelativeLayout>
